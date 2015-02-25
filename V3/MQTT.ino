@@ -4,6 +4,11 @@ boolean connection() {
     client.subscribe("protobear/com");
     return (true);
   }
+  else{
+    for(int i = 0 ; i < 10 ; i++){
+      client.
+    }
+  }
   
   
 }//end func
@@ -11,7 +16,8 @@ boolean connection() {
 
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  heart(4);
+  Serial.println(F("x"));
+  Serial.println(int(payload));
   
 if( (int(payload) - 48) == 1){
     heart(1);
