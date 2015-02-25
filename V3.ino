@@ -24,7 +24,7 @@ Dis my code bruh
 #define PIN 12// pin for contolling data pin in matrix
 #include <FileIO.h>
 
-#include <Bridge.h>
+#include <Bridge.h>  
 
 #include <SPI.h>
 
@@ -76,18 +76,18 @@ void setup() {
   Bridge.begin();
   FileSystem.begin();
   matrix.begin();
-  Serial.begin(9600); // For debugging, wait until the serial console is connected.
+  //Serial.begin(9600); // For debugging, wait until the serial console is connected.
   matrix.setBrightness(brightness);//Brigthness for NEOPIXEL matrix
   matrix.fillScreen(0);
   matrix.show(); 
   p.runShellCommand("madplay /mnt/sda1/AirTech/www/Mp3playback/bloop.mp3");
-  heart(2);
+  heart(4);
   pinMode(vibratepin,OUTPUT);
   pinMode(heartpin,INPUT);
   pinMode(squarepin, INPUT);
   pinMode(crosspin, INPUT);
   pinMode(circlepin,INPUT);
-  Serial.println(F("m"));
+  
   connection(); // function to connect to mqtt server 
 
 
@@ -105,7 +105,7 @@ void loop(){
   button();
   connection();
   client.loop();
-  
+  if (connection()){heart(4);}
 
 
 
