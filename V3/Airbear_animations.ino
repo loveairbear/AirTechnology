@@ -67,7 +67,7 @@ int heart(uint8_t showing) {
   }
   if (showing == 2) { // Full raibow cycling through heart
     matrix.setBrightness(brightness);
-    for (int j = 0; j < 256 * 5; j++) { 
+    for (int j = 0; j < 256 ; j++) { 
       //if(cancelpin()){return(2);}
       for (int lol = 0;  lol < 14 ; lol++) {
         int color = Wheel(((lol * 255 / 14) + j) & 255); 

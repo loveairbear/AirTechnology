@@ -76,21 +76,22 @@ void setup() {
   Bridge.begin();
   FileSystem.begin();
   matrix.begin();
-  //Serial.begin(9600); // For debugging, wait until the serial console is connected.
+  Serial.begin(9600); // For debugging, wait until the serial console is connected.
   matrix.setBrightness(brightness);//Brigthness for NEOPIXEL matrix
   matrix.fillScreen(0);
   matrix.show(); 
+  
   p.runShellCommand("madplay /mnt/sda1/AirTech/www/Mp3playback/bloop.mp3");
-  heart(4);
+  heart(2);
+  
   pinMode(vibratepin,OUTPUT);
+  
   pinMode(heartpin,INPUT);
   pinMode(squarepin, INPUT);
   pinMode(crosspin, INPUT);
   pinMode(circlepin,INPUT);
-  
+  client.connect("arduinoClient","fnhnuaqc","uHKb4wF1tRKe");
   connection(); // function to connect to mqtt server 
-
-
 }
 
 void loop(){
@@ -105,7 +106,6 @@ void loop(){
   button();
   connection();
   client.loop();
-  if (connection()){heart(4);}
 
 
 
