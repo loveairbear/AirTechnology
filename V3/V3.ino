@@ -81,8 +81,8 @@ void setup() {
   matrix.fillScreen(0);
   matrix.show(); 
   
-  p.runShellCommand("madplay /mnt/sda1/AirTech/www/Mp3playback/bloop.mp3");
-  heart(2);
+  p.runShellCommand("madplay /mnt/sda1/sounds/bloop.mp3");
+  heart(4);
   
   pinMode(vibratepin,OUTPUT);
   

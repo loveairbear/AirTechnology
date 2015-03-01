@@ -21,9 +21,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   
   if (((int)payload[0] - 48) == 2) {
-    hug("/mnt/sda1/AirTech/www/DecodedSprites/circle1");
-    hug("/mnt/sda1/AirTech/www/DecodedSprites/circle2");
-    hug("/mnt/sda1/AirTech/www/DecodedSprites/circle3");
+    hug("/mnt/sda1/Dsprites/circle1");
+    hug("/mnt/sda1/Dsprites/circle2");
+    hug("/mnt/sda1/Dsprites/circle3");
   }
   else {
     refresh();
