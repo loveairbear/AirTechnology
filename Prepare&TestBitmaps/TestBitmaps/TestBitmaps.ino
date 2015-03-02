@@ -50,16 +50,17 @@ void hug(char path[]){
 
 }
 
-void draw(char* werd){
-  SDbytes(werd,sd);
-  drawbitmap(sd);
-  delay(2000);
-  x = "";
-
+void fetchNsketch(char* werd){
+  char* w = "/mnt/sda1/Dsprites/";
+  char* path =(char*)malloc(strlen(w)+strlen(werd)+1); /* make space for the new string (should check the return value ...) */
+  strcpy(path, w); /* copy name into the new var, used strncpy to combat buffer overflow*/
+  strcat(path, werd); /* add the extension */
+  SDbytes(path,sd);
   
-
+  drawbitmap(sd);
+  free(path); // deallocate memory used for char array
+  delay(2000); // timer for next bitmap
 }
-
 void setup() {
   // put your setup code here, to run once:
     pinMode(13,OUTPUT);
@@ -77,21 +78,21 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  draw("lookrskullfy");
-  //draw("flamex102");
-  //draw("wispx1");
-  draw("pinetree");
-  draw("food");
-  draw("pirateship");
-  draw("clouds");
-  draw("lookrskullfy");
-  draw("magicbunny");
-  draw("emptyglass");
-  draw("halfglass");
-  draw("fullglass");
-  draw("galleyship");
-  draw("pirateship");
-  draw("slimer");
-  draw("pinetree");
+  fetchNsketch("lookrskullfy");
+  //fetchNsketch("flamex102");
+  //fetchNsketch("wispx1");
+  fetchNsketch("pinetree");
+  fetchNsketch("food");
+  fetchNsketch("pirateship");
+  fetchNsketch("clouds");
+  fetchNsketch("lookrskullfy");
+  fetchNsketch("magicbunny");
+  fetchNsketch("emptyglass");
+  fetchNsketch("halfglass");
+  fetchNsketch("fullglass");
+  fetchNsketch("galleyship");
+  fetchNsketch("pirateship");
+  fetchNsketch("slimer");
+  fetchNsketch("pinetree");
 
 }
