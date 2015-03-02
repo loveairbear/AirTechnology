@@ -200,4 +200,5 @@ void fader(int prebrightness, int timer) {
     matrix.show();
     delay(timer);
   }
+  matrix.setBrightness(brightness);
 }

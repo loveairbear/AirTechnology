@@ -17,23 +17,8 @@ bool button() {
   int counter = 0;
   if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { // enter inbox mode
     
-   // digitalWrite(vibratepin,HIGH); // this motor acts to give feedback if the loop is working
-    
-//    while (digitalRead(heartpin)==HIGH && counter <=255 ){ //This loop acts to count while 
-     // counter += 1;
- //   }
-    
-
-    //digitalWrite(vibratepin,LOW);
-    /*
-    if (counter==255){
-      SDbytes("/mnt/sda1/AirTech/www/DecodedSprites/clouds",sd);
-      drawbitmap(sd);
-    }*/
-    //else
       client.publish("protobear/sig","heartpressed");
       playmusic("madplay /mnt/sda1/Sounds/rcvd.mp3"); //
-      // client.loop(); 
     }
   
   if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == HIGH) {
@@ -61,10 +46,6 @@ bool button() {
         return (true); // breaks 
         }//end meta-if
 
-        if (cancelpin()){
-          return (true); // breaks out of function
-
-        }
     }//end while      
       
     }
@@ -72,43 +53,38 @@ bool button() {
  
   if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == HIGH) {                              // Heart button and square button (left+right)
     p.runShellCommandAsynchronously("madplay /mnt/sda1/Sounds/storytime.mp3");
-      SDbytes("/mnt/sda1/AirTech/www/DecodedSprites/galleyship",sd);
-      drawbitmap(sd);
-      //delay(3000);
-    //   SDbytes("/mnt/sda1/AirTech/www/DecodedSprites/pirateship",sd);
-     // drawbitmap(sd);
-      
     }//end while loop
   //end heart+square if
 
   
   cancelpin();//the same as if statement for square pin
 
-  if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) {
+  if (digitalRead(crosspin) == HIGH) {
+             vibrate();
+          client.publish("protobear/sig", "thingsicansend-left");
+          playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
+   /*
+
     vibrate();
     playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
-     SDbytes("/mnt/sda1/AirTech/www/DecodedSprites/wispx1",sd);
-      
-      drawbitmap(sd);
-    return (true);
+    */
+    //return (true);
   }
 
 
-  if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) {
+  if (digitalRead(circlepin) == HIGH) {
+             vibrate();
+          client.publish("protobear/sig", "thingsicansend-right");
+          playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
+/*
     vibrate();
     playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
 //    hug("/mnt/sda1/AirTech/www/DecodedSprites/circle1");
  //   hug("/mnt/sda1/AirTech/www/DecodedSprites/circle2");
   //  hug("/mnt/sda1/AirTech/www/DecodedSprites/circle3");
-    return (true);
+    return (true);*/
   }
 
 
-
-  if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == HIGH) {//entering sendmode
-    vibrate();
-    playmusic("madplay /mnt/sda1/Sounds/storynory.mp3");
-
-  }//end if
-  return (0);
+  //return (0);
 }//end function

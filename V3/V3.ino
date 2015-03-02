@@ -14,7 +14,7 @@
 
 Dis my code bruh
  avrdude -c linuxgpio -C /etc/avrdude.conf -p m32u4 -U lfuse:w:0xFF:m -U hfuse:w:0xD8:m -U efuse:w:[color=red][b]0xFB[/b][/color]:m -Uflash:w:$1:i $2
-
+UNICORRRRRRNNNNNNNNN!!!!!! IM MAKING IT WORK GODDAMIT
  */
  
 #include <Adafruit_GFX.h>
@@ -82,8 +82,7 @@ void setup() {
   matrix.show(); 
   
   p.runShellCommand("madplay /mnt/sda1/sounds/bloop.mp3");
-  heart(4);
-  
+  heart(2);
   pinMode(vibratepin,OUTPUT);
   
   pinMode(heartpin,INPUT);
