@@ -46,10 +46,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if (number == 15){fetchNsketch("slimer");}
   if (number == 16){fetchNsketch("wispx1");}
   if (number == 17){fetchNsketch("looklskullfy");fetchNsketch("lookrskullfy");fetchNsketch("looklskullfy");}
-  else {
-    connection();
-  }
-}
+  connection();
+ }
 
 
 
