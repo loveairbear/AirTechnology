@@ -177,7 +177,11 @@ void lightningstorm(){
   matrix.fillScreen(0);
 }
 */
-void hug(char path[]){
+void hug(char werd[]){
+  char* w = "/mnt/sda1/Dsprites/";
+  char* path =(char*)malloc(strlen(w)+strlen(werd)+1); /* make space for the new string (should check the return value ...) */
+  strcpy(path, w); /* copy name into the new var, used strncpy to combat buffer overflow*/
+  strcat(path, werd); /* add the extension */
   SDbytes(path,sd);
   for(int i = 0; i <= 255; i++){
     matrix.setBrightness(i);

@@ -17,7 +17,7 @@ bool button() {
   int counter = 0;
   if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { // enter inbox mode
     
-      client.publish("protobear/sig","heartpressed");
+      client.publish("protobear/sig","heartp");
       playmusic("madplay /mnt/sda1/Sounds/rcvd.mp3"); //
     }
   
@@ -29,19 +29,19 @@ bool button() {
           playmusic("madplay /mnt/sda1/Sounds/mode.mp3");
         if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // to the left
           vibrate();
-          client.publish("protobear/sig", "thingsicansend-left");
+          client.publish("protobear/sig", "scroll-left");
           playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
         }
         if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) {
           vibrate();
-          client.publish("protobear/sig", "thingsicansend-right");
+          client.publish("protobear/sig", "scroll-right");
           playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
         }
         if (digitalRead(heartpin) == HIGH) {
           vibrate();
           vibrate();
           playmusic("madplay /mnt/sda1/Sounds/send.mp3");
-          client.publish("protobear/sig", "send");
+          client.publish("protobear/sig", "scroll-send");
           
         return (true); // breaks 
         }//end meta-if
@@ -61,7 +61,7 @@ bool button() {
 
   if (digitalRead(crosspin) == HIGH) {
              vibrate();
-          client.publish("protobear/sig", "thingsicansend-left");
+          client.publish("protobear/sig", "scroll-left");
           playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
    /*
 
@@ -74,15 +74,15 @@ bool button() {
 
   if (digitalRead(circlepin) == HIGH) {
              vibrate();
-          client.publish("protobear/sig", "thingsicansend-right");
+          client.publish("protobear/sig", "scroll-right");
           playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
-/*
+
     vibrate();
-    playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
-//    hug("/mnt/sda1/AirTech/www/DecodedSprites/circle1");
- //   hug("/mnt/sda1/AirTech/www/DecodedSprites/circle2");
-  //  hug("/mnt/sda1/AirTech/www/DecodedSprites/circle3");
-    return (true);*/
+    playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");  
+    hug("circle1");
+  hug("circle2");
+  hug("circle3");
+    return (true);
   }
 
 
