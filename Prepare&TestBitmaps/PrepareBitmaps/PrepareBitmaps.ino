@@ -14,8 +14,21 @@ NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
 NEO_GRB            + NEO_KHZ800);
 
   int a[64];
-  int b[64];
-  int c[64];
+  
+  void SDbytes(char path[],int sdarray[]){
+File w=FileSystem.open(path,FILE_READ);
+
+  int x;
+for(int i = 0 ; i < 64; i++){
+  
+  x=w.read() << 8; // Extract the MSB of the 16-bit integer
+  x |= w.read(); // Append the LSB to the previous MSB
+  sdarray[i] = x;  
+}//end forloop
+w.close();
+
+}// end function
+
 
 void getem(char filepath[], int colorbuffer[64]){
 //Serial.println("function opened");
@@ -77,37 +90,7 @@ matrix.show();
 int onlypos(int number, int subtracter){
 if (number >= 200){return(number-subtracter);}  
 if (number < 200){return number;}
-
-  
 }// END FUNCTION
-
-/*
-SDbytes(String file,int WritingArray){
-int sdarray[64];
-String path = "/mnt/sda1/DSprites/"
-  
-File w = FileSystem.open(path+file,FILE_WRITE);
-for (int i = 0; i <64 ; i++){
-  int high = highByte(WritingArray[i]);
-  int low =  lowByte(WritingArray[i]);
-  w.write(high);
-  w.write(low);
-}
-w.close();
-
-
-File w=FileSystem.open(path+file,FILE_READ);
-for(int i = 1 ; i < 65 ; i++){
-  int x;
-  x=w.read() << 8; //msb
-  x |= w.read() <<8; //lsb
-  sdarray[i] = x;  
-}//end forloop
-w.close();
-return sdarray;
-}
-*/
-
 void sdwrite(char filepath[],int array[]){
 File f = FileSystem.open(filepath,FILE_WRITE);
 for (int i = 0; i <64 ; i++){
@@ -118,29 +101,62 @@ for (int i = 0; i <64 ; i++){
 }
 f.close();
 }
+void fetchNsketch(char* werd){
+  /*
+  char* w = "/mnt/sda1/Dsprites/";
+  char* path =(char*)malloc(strlen(w)+strlen(werd)+1); /* make space for the new string (should check the return value ...) */
+  //strcpy(path, w); /* copy name into the new var, used strncpy to combat buffer overflow*/
+  //strcat(path, werd); /* add the extension */
+  
+  SDbytes(werd,a);
+  
+  drawbitmap(a);
+  //free(path); // deallocate memory used for char array
+  //delay(100);
+}
+void fullpkg(char* werd,char* decoded){
+
+  char* w = "/mnt/sda1/Sprites/";
+  char* path =(char*)malloc(strlen(w)+strlen(werd)+1); /* make space for the new string (should check the return value ...) */
+  strcpy(path, w); /* copy name into the new var, used strncpy to combat buffer overflow*/
+  strcat(path, werd); /* add the extension */
+  getem(path,a);
+  free(path);
+  char* f = "/mnt/sda1/Dsprites/";
+  char* file =(char*)malloc(strlen(f)+strlen(decoded)+1); /* make space for the new string (should check the return value ...) */
+  strcpy(file, f); /* copy name into the new var, used strncpy to combat buffer overflow*/
+  strcat(file, decoded); /* add the extension */
+  sdwrite(file,a);
+  fetchNsketch(file);
+  free(file);
+  delay(500);
+}
+
+
 void setup() {
   pinMode(13,OUTPUT);
   digitalWrite(13,HIGH);
   matrix.begin();
   matrix.setBrightness(200);
   matrix.fillScreen(0);
-  
   Bridge.begin();
   FileSystem.begin();
-  
+    
   digitalWrite(13,LOW);
   }
 
-void loop(){
-    getem("/mnt/sda1/Sprites/wispx1.bmp",a);
-    getem("/mnt/sda1/Sprites/speechlessskullfy.bmp",b);
-    getem("/mnt/sda1/Sprites/surlyskullfy.bmp",c);
 
-    
-    sdwrite("/mnt/sda1/DSprites/wispx1",a);   
-    sdwrite("/mnt/sda1/DSprites/speechlessskullfy",b);
-    sdwrite("/mnt/sda1/DSprites/surlyskullfy",c);
-    
+void loop(){
+fullpkg("charmander.bmp","charmander");
+/*
+fullpkg("caffe.bmp","caffe");
+fullpkg("charmander.bmp","charmander");
+fullpkg("froggie.bmp","froggie");
+fullpkg("squirtle.bmp","squirtle");
+fullpkg("evey.bmp","evee");
+fullpkg("epicface7.bmp","face7");
+fullpkg("starcast.bmp","starcast");
+*/  
  digitalWrite(13,HIGH);
 delay(20000);
 digitalWrite(13,LOW);

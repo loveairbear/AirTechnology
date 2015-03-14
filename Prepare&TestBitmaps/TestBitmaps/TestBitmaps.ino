@@ -87,6 +87,7 @@ for(int i = 0 ; i < 64 ; i++){
 w.close();
 */
 fetchNsketch("apple");
+/*
 fetchNsketch("confuzzleskullfy");
 fetchNsketch("mountainview");
 fetchNsketch("flamex101");
@@ -110,5 +111,5 @@ fetchNsketch("exclamaskullfy");
 fetchNsketch("smokestacks");
 fetchNsketch("xmastree");
 fetchNsketch("lul");
-
+*/
 }

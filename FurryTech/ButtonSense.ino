@@ -7,6 +7,9 @@ bool cancelpin() {
     return (true);
 
   }//endif
+  else {
+    return false;
+  }
 }//end func
 
 
@@ -16,9 +19,23 @@ bool button() {
 
   int counter = 0;
   if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { // enter inbox mode
+    vibrate();
     client.publish("protobear/sig", "heartp"); // enter inbox mode
     playmusic("rcvd.mp3"); //
+          client.loop();
+      connection();
+    
     while (true) {
+      client.loop();
+      connection();
+      if (digitalRead(squarepin) == HIGH && digitalRead(heartpin) == LOW) {
+        vibrate();
+        matrix.fillScreen(0);
+        matrix.show();
+        playmusic("back.mp3");
+        return (true);
+
+      }//endif
       if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // Scroll through last 10 received messages LEFT
         vibrate();
         client.publish("protobear/sig", "heart-left");
@@ -30,20 +47,31 @@ bool button() {
         playmusic("light.mp3");
       }
       if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) {
+        vibrate();
         playmusic("mode.mp3");
+
         while (true) { // this loop functions to reply to a received emoticon
           client.loop();
           connection();
+          if (digitalRead(squarepin) == HIGH && digitalRead(heartpin) == LOW) {
+            vibrate();
+            matrix.fillScreen(0);
+            matrix.show();
+            playmusic("back.mp3");
+            return (true);
 
+          }//endif
           if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // to the left
             vibrate();
             client.publish("protobear/sig", "scroll-left");
-            playmusic("light.mp3");
+            playmusic("bloop.mp3");
+            client.loop();
           }
           if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) {
             vibrate();
             client.publish("protobear/sig", "scroll-right");
-            playmusic("light.mp3");
+            playmusic("bloop.mp3");
+            client.loop();
           }
           if (digitalRead(heartpin) == HIGH) {
             vibrate();
@@ -60,16 +88,17 @@ bool button() {
 
 
     }
-    playmusic("pickup.mp3");
   }
 
 
   //}                                                                                                   //endif for heartpin
 
   if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == HIGH) {                              // Heart button and square button (left+right)
-    //p.runShellCommandAsynchronously("storytime.mp3");
-  }//end while loop
-  //end heart+square if
+    playmusic("storytime.mp3");
+
+
+  }  //end heart+square if
+
 
 
   cancelpin();//the same as if statement for square pin
