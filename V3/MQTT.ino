@@ -30,7 +30,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     connection();
   }
   
-  if (number == 2) {fetchNsketch("croc1");fetchNsketch("croc2");fetchNsketch("croc3");connection();}
+  if (number == 2) {fetchNsketch("croc1");fetchNsketch("croc2");fetchNsketch("croc3");}
   if (number == 3) {fetchNsketch("emptyglass");fetchNsketch("halfglass");fetchNsketch("fullglass");connection();}
   if (number == 4) {refresh();heart(4);}
   if (number == 5) {hug("circle1");hug("circle2");hug("circle3");}
@@ -47,7 +47,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if (number == 16){fetchNsketch("wispx1");}
   if (number == 17){fetchNsketch("looklskullfy");fetchNsketch("lookrskullfy");fetchNsketch("looklskullfy");}
   connection();
+  matrix.setBrightness(brightness);
  }
+ 
 
 
 

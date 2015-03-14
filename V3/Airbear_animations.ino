@@ -194,7 +194,7 @@ void hug(char werd[]){
     delay(2);
   
   }
-
+matrix.setBrightness(brightness);
 }
 
 void fader(int prebrightness, int timer) {

@@ -1,9 +1,9 @@
 bool cancelpin() {
-  if (digitalRead(squarepin) == HIGH) {
+  if (digitalRead(squarepin) == HIGH && digitalRead(heartpin) == LOW) {
     vibrate();
     matrix.fillScreen(0);
     matrix.show();
-    playmusic("madplay /mnt/sda1/Sounds/back.mp3");
+    playmusic("back.mp3");
     return (true);
 
   }//endif
@@ -16,72 +16,84 @@ bool button() {
 
   int counter = 0;
   if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { // enter inbox mode
-    
-      client.publish("protobear/sig","heartp");
-      playmusic("madplay /mnt/sda1/Sounds/rcvd.mp3"); //
-    }
-  
-  if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == HIGH) {
-    
-        while (connection()) { // this loop functions to reply to a received emoticon
+    client.publish("protobear/sig", "heartp"); // enter inbox mode
+    playmusic("rcvd.mp3"); //
+    while (true) {
+      if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // Scroll through last 10 received messages LEFT
+        vibrate();
+        client.publish("protobear/sig", "heart-left");
+        playmusic("light.mp3");
+      }
+      if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) { // Scroll through last 10 received messages RIGHT
+        vibrate();
+        client.publish("protobear/sig", "heart-right");
+        playmusic("light.mp3");
+      }
+      if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) {
+        playmusic("mode.mp3");
+        while (true) { // this loop functions to reply to a received emoticon
           client.loop();
           connection();
-          playmusic("madplay /mnt/sda1/Sounds/mode.mp3");
-        if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // to the left
-          vibrate();
-          client.publish("protobear/sig", "scroll-left");
-          playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
-        }
-        if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) {
-          vibrate();
-          client.publish("protobear/sig", "scroll-right");
-          playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
-        }
-        if (digitalRead(heartpin) == HIGH) {
-          vibrate();
-          vibrate();
-          playmusic("madplay /mnt/sda1/Sounds/send.mp3");
-          client.publish("protobear/sig", "scroll-send");
-          
-        return (true); // breaks 
-        }//end meta-if
 
-    }//end while      
-      
+          if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // to the left
+            vibrate();
+            client.publish("protobear/sig", "scroll-left");
+            playmusic("light.mp3");
+          }
+          if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) {
+            vibrate();
+            client.publish("protobear/sig", "scroll-right");
+            playmusic("light.mp3");
+          }
+          if (digitalRead(heartpin) == HIGH) {
+            vibrate();
+            vibrate();
+            playmusic("send.mp3");
+            client.publish("protobear/sig", "scroll-send");
+
+            return (true); // breaks
+          }//end meta-if
+
+        }//end while
+
+      }//end meta button if
+
+
     }
+    playmusic("pickup.mp3");
+  }
+
+
   //}                                                                                                   //endif for heartpin
- 
+
   if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == HIGH) {                              // Heart button and square button (left+right)
-    p.runShellCommandAsynchronously("madplay /mnt/sda1/Sounds/storytime.mp3");
-    }//end while loop
+    //p.runShellCommandAsynchronously("storytime.mp3");
+  }//end while loop
   //end heart+square if
 
-  
+
   cancelpin();//the same as if statement for square pin
 
   if (digitalRead(crosspin) == HIGH) {
-             vibrate();
-          client.publish("protobear/sig", "scroll-left");
-          playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
-   /*
-
     vibrate();
-    playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
-    */
+    client.publish("protobear/sig", "scroll-left");
+    playmusic("bloop.mp3");
+    /*
+
+     vibrate();
+     playmusic("bloop.mp3");
+     */
     //return (true);
   }
 
 
   if (digitalRead(circlepin) == HIGH) {
-             vibrate();
-          client.publish("protobear/sig", "scroll-right");
-          playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");
 
     vibrate();
-    playmusic("madplay /mnt/sda1/Sounds/bloop.mp3");  
+    playmusic("bloop.mp3");
     hug("circle1");
-  hug("circle2");
-  hug("circle3");
+    hug("circle2");
+    hug("circle3");
     return (true);
   }
 

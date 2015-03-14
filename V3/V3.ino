@@ -38,7 +38,9 @@ uint8_t brightness = 255;
 
 Process p;
 
+uint8_t idlex[]={0,1,2,3,3,2,1,0,0,1,2,3,4,5,6,7,6,5,4,4,5,6,7,6,5,4,3,3,2,1,0,0,0};
 
+uint8_t idley[]={0,1,1,2,3,4,4,5,6,7,7,6,6,7,7,6,5,5,4,3,2,2,1,0,0,0,1,2,3,3,2,1,0};
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
 NEO_MATRIX_TOP   + NEO_MATRIX_LEFT +
 NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
@@ -81,7 +83,7 @@ void setup() {
   matrix.fillScreen(0);
   matrix.show(); 
   
-  p.runShellCommand("madplay /mnt/sda1/sounds/bloop.mp3");
+  playmusic("bloop.mp3");
   heart(2);
   pinMode(vibratepin,OUTPUT);
   
@@ -98,7 +100,7 @@ void loop(){
   
  
   
- 
+/* 
   
   
 
@@ -107,8 +109,23 @@ void loop(){
   client.loop();
 
 
+*/
 
-     /* 
+      for(int i = 0;i < 34;i++){
+        matrix.drawPixel(idlex[i],idley[i],matrix.Color(255,0,255));
+       
+        setPixelColor(idlex[(i-1)%33],idley[(i-1)%33],255,0,255,100);
+        setPixelColor(idlex[(i-2)%33],idley[(i-2)%33],255,0,255,60);
+        setPixelColor(idlex[(i-3)%33],idley[(i-3)%33],255,0,255,30);
+        setPixelColor(idlex[(i-4)%33],idley[(i-4)%33],255,0,255,10);
+        matrix.show();
+             button();
+        connection();
+        client.loop(); 
+        delay(100);
+      }
+/*
+   
       for (int i = 0;i<256;i++){
        setPixelColor(3,3,0,255,255,i);
        matrix.show();

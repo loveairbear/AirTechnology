@@ -35,5 +35,5 @@ void fetchNsketch(char* werd){
   
   drawbitmap(sd);
   free(path); // deallocate memory used for char array
-  delay(1000);
+  delay(200);
 }
