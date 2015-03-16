@@ -24,7 +24,7 @@
 
 #include <Process.h>
 
-uint8_t brightness = 255;
+uint8_t brightness = 100;
 
 Process p;
 
@@ -49,7 +49,7 @@ PubSubClient client("m10.cloudmqtt.com",16233,callback,yun);
 
 int sd[64];
 uint8_t vibratepin = 11;
-
+int yyz    = matrix.width();
 
 boolean refresh(){
   matrix.fillScreen(0);
@@ -72,7 +72,8 @@ void setup() {
   matrix.setBrightness(brightness);//Brigthness for NEOPIXEL matrix
   matrix.fillScreen(0);
   matrix.show(); 
-  
+  matrix.setTextWrap(false);
+  matrix.setTextColor(matrix.Color(255,0,255));
   playmusic("bloop.mp3");
   heart(2);
   pinMode(vibratepin,OUTPUT);
@@ -86,18 +87,21 @@ void setup() {
 }
 
 void loop(){
-
-  
+ 
+  for ( int i = 30 ; i >= 0 ; i--){
+      matrix.fillScreen(0);
+      matrix.setCursor(yyz, 0);
+      fetchNsketch("charmander");
+    }
+    yyz = matrix.width();
  
   
- 
   
-  
-
+/*
   button();
   connection();
   client.loop();
-
+*/
 
 /*
 

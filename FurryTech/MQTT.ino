@@ -36,13 +36,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if (number == 5) {hug("circle1");hug("circle2");hug("circle3");}
   if (number == 6) {fetchNsketch("apple");}
   if (number == 7) {fetchNsketch("food");}
-  if (number == 8) {fetchNsketch("flamex101");fetchNsketch("flamex102");}
-  if (number == 9) {fetchNsketch("magicbunny");}
-  if (number == 10){fetchNsketch("ring");}
-  if (number == 11){fetchNsketch("galleyship");}
-  if (number == 12){fetchNsketch("coolbird");}
-  if (number == 13){fetchNsketch("lollerpop");}
-  if (number == 14){fetchNsketch("smokestacks");}
+  if (number == 8) {fetchNsketch("charmander");}
+  if (number == 9) {fetchNsketch("squirtle");}
+  if (number == 10){fetchNsketch("gundam");}
+  if (number == 11){fetchNsketch("peach");}
+  if (number == 12){fetchNsketch("rooster");}
+  if (number == 13){fetchNsketch("loller");}
+  if (number == 14){fetchNsketch("");}
   if (number == 15){fetchNsketch("slimer");}
   if (number == 16){fetchNsketch("wispx1");}
   if (number == 17){fetchNsketch("looklskullfy");fetchNsketch("lookrskullfy");fetchNsketch("looklskullfy");}
