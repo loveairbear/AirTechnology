@@ -150,7 +150,7 @@ void setup() {
 
 void loop() {
   
-  fullpkg("360ninja1.bmp", "360ninja1");
+  fullpkg("dragon.bmp", "dragon");
   fullpkg("360ninja2.bmp","360ninja2");
   fullpkg("360ninja3.bmp","360ninja3");
   fullpkg("360ninja4.bmp","360ninja4");

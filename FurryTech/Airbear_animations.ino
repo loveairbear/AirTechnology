@@ -185,12 +185,12 @@ void hug(char werd[]){
   SDbytes(path,sd);
   for(int i = 0; i <= 255; i++){
     matrix.setBrightness(i);
-    drawbitmap(sd);
+    drawbitmap(sd,0);
   
   }
     for(int i = 255; i>=0; i--){
     matrix.setBrightness(i);
-    drawbitmap(sd);
+    drawbitmap(sd,0);
     delay(2);
   
   }
