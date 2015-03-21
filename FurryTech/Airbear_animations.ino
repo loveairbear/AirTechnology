@@ -133,7 +133,7 @@ int heart(uint8_t showing) {
   }
 }
 
-/*
+
 void lightningstorm(){
 
 
@@ -176,7 +176,7 @@ void lightningstorm(){
   delay(1000);
   matrix.fillScreen(0);
 }
-*/
+
 void hug(char werd[]){
   char* w = "/mnt/sda1/Dsprites/";
   char* path =(char*)malloc(strlen(w)+strlen(werd)+1); /* make space for the new string (should check the return value ...) */

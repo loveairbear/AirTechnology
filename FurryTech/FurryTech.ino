@@ -24,24 +24,27 @@
 
 #include <Process.h>
 
-uint8_t brightness = 255;
+uint8_t brightness = 255;  // UNIVERSAL BRIGHTNESS VALUE FOR MATRIX
 
 Process p;
-
-uint8_t idlex[]={0,1,2,3,3,2,1,0,0,1,2,3,4,5,6,7,6,5,4,4,5,6,7,6,5,4,3,3,2,1,0,0,0};
-
-uint8_t idley[]={0,1,1,2,3,4,4,5,6,7,7,6,6,7,7,6,5,5,4,3,2,2,1,0,0,0,1,2,3,3,2,1,0};
+// MATRIX INTIALIZATION //
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
 NEO_MATRIX_TOP   + NEO_MATRIX_LEFT +
 NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
 NEO_GRB            + NEO_KHZ800);
 
+//Ghost Animation
+uint8_t idlex[]={0,1,2,3,3,2,1,0,0,1,2,3,4,5,6,7,6,5,4,4,5,6,7,6,5,4,3,3,2,1,0,0,0};
 
+uint8_t idley[]={0,1,1,2,3,4,4,5,6,7,7,6,6,7,7,6,5,5,4,3,2,2,1,0,0,0,1,2,3,3,2,1,0};
+
+
+/* VARIABLES FOR MQTT */
 YunClient yun;
 PubSubClient client("m10.cloudmqtt.com",16233,callback,yun);
 
 
-
+/* VARIABLES FOR BUTTONS */
  uint8_t heartpin  = 9; // blue button -- left paw
  uint8_t squarepin  = 8; //grey button -- right paw
  uint8_t crosspin  = 6; //red button --left foot
@@ -50,6 +53,11 @@ PubSubClient client("m10.cloudmqtt.com",16233,callback,yun);
 int sd[64];
 uint8_t vibratepin = 11;
 
+/*
+*/
+char* sounds[17] = {"a","a1","a2","a3","a4","a5","a6","a7","a8","a9",
+                    "b","b1","b2","b3","b4","b5","b6"};
+const uint8_t soundsize = 17;
 boolean refresh(){
   matrix.fillScreen(0);
   matrix.show();
@@ -65,14 +73,14 @@ void vibrate(){
 
 void setup() {
   delay(60);
-  Bridge.begin();
-  FileSystem.begin();
   matrix.begin();
-  //Serial.begin(9600); // For debugging, wait until the serial console is connected.
+ // For debugging, wait until the serial console is connected.
   matrix.setBrightness(brightness);//Brigthness for NEOPIXEL matrix
   matrix.fillScreen(0);
   matrix.show(); 
-  playmusic("bloop.mp3");
+  Bridge.begin();
+  FileSystem.begin();
+  playmusic("bloop");
   heart(2);
   pinMode(vibratepin,OUTPUT);
   
@@ -82,6 +90,7 @@ void setup() {
   pinMode(circlepin,INPUT);
   client.connect("arduinoClient","fnhnuaqc","uHKb4wF1tRKe");
   connection(); // function to connect to mqtt server 
+  vibrate();
 }
 
 void loop(){

@@ -1,13 +1,12 @@
 bool cancelpin() {
   if (digitalRead(squarepin) == HIGH && digitalRead(heartpin) == LOW) {
     vibrate();
-    playmusic("back.mp3");
-    for (int q = brightness ; q >= 0  ; q-=5) {
+    playmusic("back");
+    for (int q = brightness ; q >= 0  ; q -= 5) {
       matrix.setBrightness(q);
       matrix.show();
-      delay(20);
+      delay(10);
     }
-    
     return (true);
 
   }//endif
@@ -17,54 +16,54 @@ bool cancelpin() {
 }//end func
 
 int last = 0;
-int first =0;
+int first = 0;
 
 bool button() {
 
 
-   
+
   if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { // ENTER INBOX MODE
     vibrate();
     client.publish("protobear/sig", "heartp"); // enter inbox mode
-    playmusic("rcvd.mp3"); //
+    playmusic("rcvd"); //
     client.loop();
     connection();
-    while (true) {
+    while (true) { /// ENTER INBOX MODE
       client.loop();
       connection();
       if (digitalRead(squarepin) == HIGH && digitalRead(heartpin) == LOW) { //CANCEL PIN
         vibrate();
-        playmusic("back.mp3");
-        for (int q = brightness ; q >= 0  ; q-=5) {
+        playmusic("back");
+        for (int q = brightness ; q >= 0  ; q -= 5) {
           matrix.setBrightness(q);
           matrix.show();
           delay(30);
         }
         break;
       }//endif
-      
+
       if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // Scroll through last 10 received messages LEFT
         vibrate();
         client.publish("protobear/sig", "heart-left");
-        playmusic("light.mp3");
+        playmusic("light");
       }//end if
-      
+
       if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) { // Scroll through last 10 received messages RIGHT
         vibrate();
         client.publish("protobear/sig", "heart-right");
-        playmusic("light.mp3");
+        playmusic("light");
       }//endif
-      
-      if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { //  ENTER  
+
+      if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { //  ENTER SEND MODE
         vibrate();
-        playmusic("mode.mp3");
+        playmusic("mode");
         while (true) { // this loop functions to reply to a received emoticon
           client.loop();
           connection();
           if (digitalRead(squarepin) == HIGH && digitalRead(heartpin) == LOW) { //CANCEL PIN
             vibrate();
-            playmusic("back.mp3");
-            for (int q = brightness ; q >= 0  ; q-=5) {
+            playmusic("back");
+            for (int q = brightness ; q >= 0  ; q -= 5) {
               matrix.setBrightness(q);
               matrix.show();
               delay(30);
@@ -74,21 +73,21 @@ bool button() {
           if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // to the left
             vibrate();
             client.publish("protobear/sig", "scroll-left");
-            playmusic("bloop.mp3");
+            playmusic("bloop");
             client.loop();
           }//endif
-          
+
           if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) {
             vibrate();
             client.publish("protobear/sig", "scroll-right");
-            playmusic("bloop.mp3");
+            playmusic("bloop");
             client.loop();
           }//endif
-          
+
           if (digitalRead(heartpin) == HIGH) {
             vibrate();
             vibrate();
-            playmusic("send.mp3");
+            playmusic("send");
             client.publish("protobear/sig", "scroll-send");
             return (true); // break out of function
           }//end meta-if
@@ -100,32 +99,56 @@ bool button() {
 
     }//end while loop for receive mode
   }//end if for heart button
-                                                                                                   //endif for heartpin
-
-  if(digitalRead(crosspin) == HIGH){
+  //endif for heartpin
+  /// ENTER PLAYMODE :D ////////
+  if (digitalRead(crosspin) == HIGH) {
     first = millis();
-    while (true){
-      if (digitalRead(crosspin) == LOW){
+    uint8_t index = 0;
+    while (true) {
+      if (digitalRead(crosspin) == LOW) {
         last = millis();
         break;
-      }
-    }
-    if(last-first > 800){
+      }//endif
+    }//endwhile
+    
+    if (last - first > 800) {
       vibrate();
-      fetchNsketch("360ninja1",1);
-      //playmusic("storytime.mp3");
-      vibrate();
+      playmusic("pickup");
+    }//endif
+    
+    while (true) {
+         if(cancelpin()== true){p.close();break;}
+         if (digitalRead(crosspin) == true){
+              //to the left!
+            p.close();
+            index = (index-1);
+            index = index % soundsize;
+            playsongs(sounds[index]);
+          delay(500);
+        
+         }
+        if (digitalRead(circlepin) == true){
+          //to the right
+          
+          p.close();
+          index = (index+1);
+          index = index % soundsize;
+          playsongs(sounds[index]);
+          delay(500);
+        }
+        if (index==2){fetchNsketch("link",0);}
+        else{matrix.fillScreen(0);matrix.show();}
     }
-  } //end hold  if
+} //end hold  if
+
+/// END PLAYMODE /////////////////
 
 
-
-
-  cancelpin();//the same as if statement for square pin
+cancelpin();//the same as if statement for square pin
   if (digitalRead(circlepin) == HIGH) {
 
     vibrate();
-    playmusic("bloop.mp3");    
+    playmusic("bloop");
     hug("circle1");
     hug("circle2");
     hug("circle3");
