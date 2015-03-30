@@ -45,14 +45,29 @@ else{
 }
 
 
-void fetchNsketch(char* werd,uint8_t mode){
+void fetchNsketch(char* werd,uint8_t mode,uint8_t frames){
   char* w = ("/mnt/sda1/Dsprites/");
-  char* path =(char*)malloc(strlen(w)+strlen(werd)+1); /* make space for the new string (should check the return value ...) */
-  strcpy(path, w); /* copy name into the new var*/
-  strcat(path, werd); /* add the extension */
-  SDbytes(path,sd);
-  free(path);// deallocate memory used for char array
-  drawbitmap(sd,mode);
   
-  delay(60); // To give the Yun a break so it doesnt straight up die
+  if(frames!=0){
+    for(int i=1 ; i <= frames ; i++){
+      char* path =(char*)malloc(strlen(w)+strlen(werd)+3+1); /* make space for the new string (should check the return value ...) */
+      char list[2];
+      strcpy(path, w); /* copy name into the new var*/
+      strcat(path, werd); /* add the extension */
+      strcat(path,itoa(i,list,10));/* add the extension */
+      SDbytes(path,sd);
+      free(path);// deallocate memory used for char array
+      drawbitmap(sd,mode);
+      delay(300);
+  }
+  }
+  else{
+    char* path =(char*)malloc(strlen(w)+strlen(werd)+1+1); /* make space for the new string (should check the return value ...) */
+    strcpy(path, w); /* copy name into the new var*/
+    strcat(path, werd); /* add the extension */
+    SDbytes(path,sd);
+    free(path);// deallocate memory used for char array
+    drawbitmap(sd,mode);
+    delay(200); // To give the Yun a break so it doesnt straight up die
+  }
 }

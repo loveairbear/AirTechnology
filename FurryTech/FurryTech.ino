@@ -52,12 +52,12 @@ PubSubClient client("m10.cloudmqtt.com",16233,callback,yun);
 
 int sd[64];
 uint8_t vibratepin = 11;
+char* branch = "protobear/sig";
 
 /*
 */
-char* sounds[17] = {"a","a1","a2","a3","a4","a5","a6","a7","a8","a9",
-                    "b","b1","b2","b3","b4","b5","b6"};
-const uint8_t soundsize = 17;
+
+const uint8_t soundsize = 8;
 boolean refresh(){
   matrix.fillScreen(0);
   matrix.show();
@@ -94,11 +94,6 @@ void setup() {
 }
 
 void loop(){
-  button();
-  connection();
-  client.loop();
-
-/*
 
       for(int i = 0;i < 34;i++){
         matrix.drawPixel(idlex[i],idley[i],matrix.Color(255,0,255));
@@ -113,8 +108,7 @@ void loop(){
         client.loop(); 
         delay(100);
       }
-/*
-   
+   /*
       for (int i = 0;i<256;i++){
        setPixelColor(3,3,0,255,255,i);
        matrix.show();
@@ -128,7 +122,7 @@ void loop(){
   connection();
   client.loop();  
     }
-     
+    
       for (int i = 255;i>=0;i--){
        setPixelColor(3,3,0,255,255,i);
        matrix.show();

@@ -24,7 +24,7 @@ bool button() {
 
   if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { // ENTER INBOX MODE
     vibrate();
-    client.publish("protobear/sig", "heartp"); // enter inbox mode
+    client.publish(branch, "heartp"); // enter inbox mode
     playmusic("rcvd"); //
     client.loop();
     connection();
@@ -44,13 +44,13 @@ bool button() {
 
       if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // Scroll through last 10 received messages LEFT
         vibrate();
-        client.publish("protobear/sig", "heart-left");
+        client.publish(branch, "heart-left");
         playmusic("light");
       }//end if
 
       if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) { // Scroll through last 10 received messages RIGHT
         vibrate();
-        client.publish("protobear/sig", "heart-right");
+        client.publish(branch, "heart-right");
         playmusic("light");
       }//endif
 
@@ -72,14 +72,14 @@ bool button() {
           }//endif
           if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // to the left
             vibrate();
-            client.publish("protobear/sig", "scroll-left");
+            client.publish(branch, "scroll-left");
             playmusic("bloop");
             client.loop();
           }//endif
 
           if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) {
             vibrate();
-            client.publish("protobear/sig", "scroll-right");
+            client.publish(branch, "scroll-right");
             playmusic("bloop");
             client.loop();
           }//endif
@@ -88,7 +88,7 @@ bool button() {
             vibrate();
             vibrate();
             playmusic("send");
-            client.publish("protobear/sig", "scroll-send");
+            client.publish(branch, "scroll-send");
             return (true); // break out of function
           }//end meta-if
 
@@ -123,7 +123,7 @@ bool button() {
             p.close();
             index = (index-1);
             index = index % soundsize;
-            playsongs(sounds[index]);
+            playsongs(char(index));
           delay(500);
         
          }
@@ -133,10 +133,10 @@ bool button() {
           p.close();
           index = (index+1);
           index = index % soundsize;
-          playsongs(sounds[index]);
+          playsongs(char(index));
           delay(500);
         }
-        if (index==2){fetchNsketch("link",0);}
+        
         else{matrix.fillScreen(0);matrix.show();}
     }
 } //end hold  if
@@ -157,4 +157,5 @@ cancelpin();//the same as if statement for square pin
 
 
   //return (0);
-}//end function
+}//end function 
+

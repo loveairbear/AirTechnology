@@ -29,9 +29,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
   
   if (number== 1){ 
     refresh();
-  //  heart(3);                   
+   heart(3);                   
     connection();
   }
+
+  
   else{
     connection();
     matrix.setBrightness(brightness);

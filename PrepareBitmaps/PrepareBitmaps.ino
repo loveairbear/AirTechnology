@@ -150,12 +150,13 @@ void setup() {
 
 void loop() {
   
-  fullpkg("croc1.bmp", "croc1");
-  fullpkg("croc2.bmp","croc2");
-  fullpkg("croc3.bmp","croc3");
-  fullpkg("link.bmp","link");
-  fullpkg("mario.bmp","mario");
-  fullpkg("wg0face.bmp","wg0face");
+  fullpkg("epicface1.bmp", "epicface1");
+  fullpkg("epicface2.bmp","epicface2");
+  fullpkg("epicface3.bmp","epicface3");
+  fullpkg("epicface4.bmp","epicface4");
+  fullpkg("epicface5.bmp","epicface5");
+  fullpkg("epicface6.bmp","epicface6");
+  fullpkg("epicface7.bmp","epicface7");
   /*
   fullpkg("fullglass.bmp","fullglass");
   fullpkg("evey.bmp","evee");
