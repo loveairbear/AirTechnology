@@ -41,7 +41,7 @@ int heart(uint8_t showing) {
     matrix.setBrightness(brightness);
 
     for (int j = 0; j < 256; j++) { 
-      //if (cancelpin()){return(1);}
+      if (cancelpin()==true){return(1);}
       for (int lol = 0;  lol < 15 ; lol++) {// + 30 ( 2 colors at same time),9 double rainbow , the + 40 added to j causes a faster color change in the ring
 
         matrix.drawPixel(heartx[lol], hearty[lol], (Wheel((lol + j  ) & 255)));
@@ -68,7 +68,7 @@ int heart(uint8_t showing) {
   if (showing == 2) { // Full raibow cycling through heart
     matrix.setBrightness(brightness);
     for (int j = 0; j < 256 ; j++) { 
-      //if(cancelpin()){return(2);}
+      if(cancelpin()==true){return(2);}
       for (int lol = 0;  lol < 14 ; lol++) {
         int color = Wheel(((lol * 255 / 14) + j) & 255); 
         matrix.drawPixel(heartx[lol], hearty[lol], color);
@@ -85,7 +85,7 @@ int heart(uint8_t showing) {
   if (showing == 3) {// rainbow heart which has 2 colors on the screen at a time
     matrix.setBrightness(brightness);
     for (int j = 0; j < 256; j++) { 
-      //if (cancelpin()){return(3);}
+      if (cancelpin()==true){return(3);}
       for (int lol = 0;  lol < 15 ; lol++) {
         int color = (Wheel((lol + j + 40  ) & 255));
 
@@ -132,7 +132,7 @@ int heart(uint8_t showing) {
     return (showing);
   }
 }
-
+/*
 
 void lightningstorm(){
 
@@ -176,7 +176,7 @@ void lightningstorm(){
   delay(1000);
   matrix.fillScreen(0);
 }
-
+*/
 void hug(char werd[]){
   char* w = "/mnt/sda1/Dsprites/";
   char* path =(char*)malloc(strlen(w)+strlen(werd)+1); /* make space for the new string (should check the return value ...) */

@@ -45,7 +45,7 @@ else{
 }
 
 
-void fetchNsketch(char* werd,uint8_t mode,uint8_t frames){
+bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames){
   char* w = ("/mnt/sda1/Dsprites/");
   
   if(frames!=0){
@@ -58,7 +58,9 @@ void fetchNsketch(char* werd,uint8_t mode,uint8_t frames){
       SDbytes(path,sd);
       free(path);// deallocate memory used for char array
       drawbitmap(sd,mode);
-      delay(300);
+      delay(350);
+      if(scrollingmusic()==true){return true;}
+      if(cancelpin()==true){return false;}
   }
   }
   else{
@@ -69,5 +71,7 @@ void fetchNsketch(char* werd,uint8_t mode,uint8_t frames){
     free(path);// deallocate memory used for char array
     drawbitmap(sd,mode);
     delay(200); // To give the Yun a break so it doesnt straight up die
-  }
+    return (true); 
+}
+return true;
 }

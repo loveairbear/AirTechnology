@@ -24,8 +24,8 @@
 
 #include <Process.h>
 
-uint8_t brightness = 255;  // UNIVERSAL BRIGHTNESS VALUE FOR MATRIX
-
+uint8_t brightness = 50;  // UNIVERSAL BRIGHTNESS VALUE FOR MATRIX
+//Should be a multiple of 5
 Process p;
 // MATRIX INTIALIZATION //
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
@@ -53,11 +53,12 @@ PubSubClient client("m10.cloudmqtt.com",16233,callback,yun);
 int sd[64];
 uint8_t vibratepin = 11;
 char* branch = "protobear/sig";
+uint8_t index = 0;
 
 /*
 */
 
-const uint8_t soundsize = 8;
+const uint8_t soundsize = 14;
 boolean refresh(){
   matrix.fillScreen(0);
   matrix.show();
@@ -95,19 +96,24 @@ void setup() {
 
 void loop(){
 
-      for(int i = 0;i < 34;i++){
-        matrix.drawPixel(idlex[i],idley[i],matrix.Color(255,0,255));
-       
-        setPixelColor(idlex[(i-1)%33],idley[(i-1)%33],255,0,255,100);
-        setPixelColor(idlex[(i-2)%33],idley[(i-2)%33],255,0,255,60);
-        setPixelColor(idlex[(i-3)%33],idley[(i-3)%33],255,0,255,30);
-        setPixelColor(idlex[(i-4)%33],idley[(i-4)%33],255,0,255,10);
+  
+  
+      for(int i = 0;i < 36;i++){
+        setPixelColor(idlex[(i)%36],idley[(i)%36],255,0,255,255);
+        setPixelColor(idlex[(i-1)%36],idley[(i-1)%36],255,0,255,100);
+        setPixelColor(idlex[(i-2)%36],idley[(i-2)%36],255,0,255,60);
+        setPixelColor(idlex[(i-3)%36],idley[(i-3)%36],255,0,255,30);
+        setPixelColor(idlex[(i-4)%36],idley[(i-4)%36],255,0,255,10);
         matrix.show();
-             button();
+        button();
         connection();
         client.loop(); 
-        delay(100);
+        delay(200);
       }
+      refresh();
+      //for(int i=0;i<10000;i++){button();client.loop(); }
+      connection();
+      
    /*
       for (int i = 0;i<256;i++){
        setPixelColor(3,3,0,255,255,i);
@@ -119,8 +125,8 @@ void loop(){
     setPixelColor(4,3,0,255,255,i);
     matrix.show();
      button();
-  connection();
-  client.loop();  
+     connection();
+     client.loop();  
     }
     
       for (int i = 255;i>=0;i--){

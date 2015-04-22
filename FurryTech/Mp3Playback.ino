@@ -21,7 +21,7 @@ void playsongs(char file){
   strcat(path, itoa(file,song,10)); /* add the extension */
   strcat(path, ".mp3");
   p.addParameter(path);
-   p.addParameter("--replay-gain=audiophile");
+  // p.addParameter("--replay-gain=audiophile");
   p.addParameter("-A-30");
  
   free(path);

@@ -116,22 +116,51 @@ void fetchNsketch(char* werd) {
   //free(path); // deallocate memory used for char array
   //delay(100);
 }
-void fullpkg(char* werd, char* decoded) {
-
+void fullpkg(char werd[],uint8_t frames) {
+  if (frames>0){
+  for (int i = 1 ; i <= frames ; i++){
+  char* w = "/mnt/sda1/Sprites/";
+  char numbuffer1[3];itoa(i,numbuffer1,10);
+  char* path = (char*)malloc(strlen(w) + strlen(werd) + 1+5+3); /* make space for the new string (should check the return value ...) */
+  strcpy(path, w); /* copy name into the new var, used strncpy to combat buffer overflow*/
+  strcat(path, werd); /* add the extension */
+  strcat(path,numbuffer1);/* add the extension */
+  strcat(path,".bmp");
+  getem(path, a);
+  free(path);
+  char* f = "/mnt/sda1/Dsprites/";
+  //werd[strlen(werd)-4] = 0;//trim the ".bmp" off
+  char* file = (char*)malloc(strlen(f) + strlen(werd) + 1 + 3); /* make space for the new string (should check the return value ...) */
+  strcpy(file, f); /* copy name into the new var, used strncpy to combat buffer overflow*/
+  strcat(file, werd); /* add the extension */
+  strcat(path,numbuffer1);/* add the extension */
+  sdwrite(file, a);
+  fetchNsketch(file);
+  free(file);
+  delay(500);
+  }
+  
+}
+}
+void render(char werd[]){
   char* w = "/mnt/sda1/Sprites/";
   char* path = (char*)malloc(strlen(w) + strlen(werd) + 1); /* make space for the new string (should check the return value ...) */
   strcpy(path, w); /* copy name into the new var, used strncpy to combat buffer overflow*/
   strcat(path, werd); /* add the extension */
   getem(path, a);
   free(path);
+  
+  werd[strlen(werd)-4] = 0;//trim the ".bmp" off
   char* f = "/mnt/sda1/Dsprites/";
-  char* file = (char*)malloc(strlen(f) + strlen(decoded) + 1); /* make space for the new string (should check the return value ...) */
+  char* file = (char*)malloc(strlen(f) + strlen(werd) + 1); /* make space for the new string (should check the return value ...) */
   strcpy(file, f); /* copy name into the new var, used strncpy to combat buffer overflow*/
-  strcat(file, decoded); /* add the extension */
+  strcat(file, werd); /* add the extension */
   sdwrite(file, a);
   fetchNsketch(file);
   free(file);
   delay(500);
+
+
 }
 
 
@@ -139,47 +168,23 @@ void setup() {
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);
   matrix.begin();
-  matrix.setBrightness(200);
+  matrix.setBrightness(100);
   matrix.fillScreen(0);
   Bridge.begin();
   FileSystem.begin();
-
+  Serial.begin(9600);
   digitalWrite(13, LOW);
 }
 
 
 void loop() {
-  
-  fullpkg("epicface1.bmp", "epicface1");
-  fullpkg("epicface2.bmp","epicface2");
-  fullpkg("epicface3.bmp","epicface3");
-  fullpkg("epicface4.bmp","epicface4");
-  fullpkg("epicface5.bmp","epicface5");
-  fullpkg("epicface6.bmp","epicface6");
-  fullpkg("epicface7.bmp","epicface7");
-  /*
-  fullpkg("fullglass.bmp","fullglass");
-  fullpkg("evey.bmp","evee");
-  fullpkg("emptyglass.bmp","emptyglass");
-  fullpkg("food.bmp","food");
-  fullpkg("croc3.bmp","croc3");
-  fullpkg("croc2.bmp","croc2");
-  fullpkg("croc1.bmp","croc1");
-  fullpkg("circle1.bmp","circle1");
-  fullpkg("circle2.bmp","circle2");
-  fullpkg("circle3.bmp","circle3");
-  fullpkg("wg0face.bmp","gundam");
-  fullpkg("apple.bmp","apple");
-  fullpkg("starcastf3x.bmp","star3x");
-  fullpkg("starcastf3o.bmp","star3");
-  fullpkg("starcastf2.bmp","star2");
-  fullpkg("squirtle.bmp","squirtle");
-  fullpkg("starcast.bmp","starcast");
-  fullpkg("rooster.bmp","rooster");
-  fullpkg("pikasnu.bmp","pikachu");
-  fullpkg("pikaface.bmp","pikaface");
-  fullpkg("peach.bmp","peach");
-  */
+  //render("evey.bmp");
+  //fullpkg("eau",6);
+  //fullpkg("creeperd",23);
+  //fullpkg("kissy",16);
+  //fullpkg("meteor",14);
+  //fullpkg("tama",6);
+  //fullpkg("cloud",11);
   digitalWrite(13, HIGH);
   delay(20000);
   digitalWrite(13, LOW);
