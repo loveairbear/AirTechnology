@@ -24,20 +24,27 @@
 
 #include <Process.h>
 
-uint8_t brightness = 50;  // UNIVERSAL BRIGHTNESS VALUE FOR MATRIX
+uint8_t brightness = 20;  // UNIVERSAL BRIGHTNESS VALUE FOR MATRIX
 //Should be a multiple of 5
 Process p;
-// MATRIX INTIALIZATION //
+// MATRIX INTIALIZATION // For airbear FLEXIBLE matrix
+/*
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
 NEO_MATRIX_TOP   + NEO_MATRIX_LEFT +
 NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
+NEO_GRB            + NEO_KHZ800);
+*/
+
+// For adafruit 8x8 RIGID matrix
+Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
+NEO_MATRIX_TOP     + NEO_MATRIX_RIGHT +
+NEO_MATRIX_COLUMNS + NEO_MATRIX_PROGRESSIVE,
 NEO_GRB            + NEO_KHZ800);
 
 //Ghost Animation
 uint8_t idlex[]={0,1,2,3,3,2,1,0,0,1,2,3,4,5,6,7,6,5,4,4,5,6,7,6,5,4,3,3,2,1,0,0,0};
 
 uint8_t idley[]={0,1,1,2,3,4,4,5,6,7,7,6,6,7,7,6,5,5,4,3,2,2,1,0,0,0,1,2,3,3,2,1,0};
-
 
 /* VARIABLES FOR MQTT */
 YunClient yun;
@@ -50,14 +57,13 @@ PubSubClient client("m10.cloudmqtt.com",16233,callback,yun);
  uint8_t crosspin  = 6; //red button --left foot
  uint8_t circlepin  = 5; // yellow button -- right foot
 
-int sd[64];
+int sd[64]; //buffer array for bitmap rendering
 uint8_t vibratepin = 11;
 char* branch = "protobear/sig";
-uint8_t index = 0;
+uint8_t index = 0;// global index to scroll through emoticons in sendmode
 
-/*
-*/
-
+uint8_t animode=0; // mode signals for program mechanics
+uint8_t mqttsig=0; //exit status for program mechanics
 const uint8_t soundsize = 14;
 boolean refresh(){
   matrix.fillScreen(0);
@@ -75,8 +81,8 @@ void vibrate(){
 void setup() {
   delay(60);
   matrix.begin();
- // For debugging, wait until the serial console is connected.
-  matrix.setBrightness(brightness);//Brigthness for NEOPIXEL matrix
+  Serial.begin(9600);
+  matrix.setBrightness(brightness);//Brightness for NEOPIXEL matrix
   matrix.fillScreen(0);
   matrix.show(); 
   Bridge.begin();
@@ -95,8 +101,8 @@ void setup() {
 }
 
 void loop(){
-
-  
+  heart(3);
+  /*
   
       for(int i = 0;i < 36;i++){
         setPixelColor(idlex[(i)%36],idley[(i)%36],255,0,255,255);

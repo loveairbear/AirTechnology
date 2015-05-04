@@ -22,8 +22,9 @@ bool scrollingmusic(){
            if (digitalRead(crosspin) == true){
               //to the left!
             p.close();
-            index = (index-1);
-            index = index % soundsize;
+            index = index-1;
+            index = (index % soundsize);
+            Serial.println(index);
             playsongs(char(index));
             delay(500);
             return true;
@@ -33,84 +34,104 @@ bool scrollingmusic(){
           //to the right
           
           p.close();
-          index = (index+1);
+          index = index+1;
           index = index % soundsize;
+          Serial.println(index);
           playsongs(char(index));
-           delay(500);
-          return true;
-        }
+          delay(500);
+          return true;        
+          }
         else{return false;}
 }//end func
-
-int last = 0;
-int first = 0;
-
-bool button() {
-
-
-
-  if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { // ENTER INBOX MODE
-    vibrate();
-    client.publish(branch, "heartp"); // enter inbox mode
-    playmusic("rcvd"); //
-    client.loop();
-    connection();
-    while (true) { /// ENTER INBOX MODE
-      client.loop();
-      connection();
-      if(cancelpin()==true){return false;}
-
-      if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // Scroll through last 10 received messages LEFT
-        vibrate();
-        client.publish(branch, "heart-left");
-        playmusic("light");
-      }//end if
-
-      if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) { // Scroll through last 10 received messages RIGHT
-        vibrate();
-        client.publish(branch, "heart-right");
-        playmusic("light");
-      }//endif
-
-      if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { //  ENTER SEND MODE
-        vibrate();
-        playmusic("mode");
-        while (true) { // this loop functions to reply to a received emoticon
+ bool sendmode(){         
           client.loop();
           connection();
-          if(cancelpin()==true){return false;}
+          if(cancelpin()==true){return true;}
           if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // to the left
             vibrate();
             client.publish(branch, "scroll-left");
             playmusic("bloop");
             client.loop();
+            return(false);
           }//endif
 
-          if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) {
+          if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) { // to the right
             vibrate();
             client.publish(branch, "scroll-right");
             playmusic("bloop");
             client.loop();
+            return(false);
           }//endif
 
-          if (digitalRead(heartpin) == HIGH) {
+          if (digitalRead(heartpin) == HIGH) { // heart button
             vibrate();
             vibrate();
             playmusic("send");
             client.publish(branch, "scroll-send");
             return (true); // break out of function
           }//end meta-if
+          else{return false;}
+    }//end function
+uint8_t receivemode(){
+      client.loop();
+      connection();
+      if(cancelpin()==true){return 1;}//endif
 
-        }//end while for send mode
+      if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // Scroll through last 10 received messages LEFT
+        vibrate();
+        client.publish(branch, "heart-left");
+        playmusic("light");
+        return 3;
+      }//end if
 
-      }//end meta button if
+      if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) { // Scroll through last 10 received messages RIGHT
+        vibrate();
+        client.publish(branch, "heart-right");
+        playmusic("light");
+        return 3;
+      }//endif
 
+      if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { //  ENTER SEND MODE
+        vibrate();
+        playmusic("mode");      
+        return 2;
+      }//endif
+      
+      else{
+        return(0);
+      }
+    }//end function
+int last = 0;
+int first = 0;
 
+bool button() {
+  if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { // ENTER INBOX MODE
+    vibrate();
+    playmusic("rcvd"); //
+    
+    connection();
+    animode=3; //set animode to inboxmode
+    mqttsig=0; // reset mqtt flag signal
+    client.publish(branch, "heartp"); // enter inbox mode
+    client.loop();
+    
+    while (true) { /// ENTER INBOX MODE 
+      Serial.println(mqttsig);
+      if(receivemode()==1){return false;}//endif
+      if(mqttsig==1){return true;}
+      if(receivemode()==2){
+        animode=4;
+        while (true){
+          Serial.println(955);
+          if(sendmode()==true){return true;}
+        } //ENTER SENDMODE
+        return true;
+      }//endif
     }//end while loop for receive mode
   }//end if for heart button
-  //endif for heartpin
+           
   /// ENTER PLAYMODE :D ////////
-  if (digitalRead(crosspin) == HIGH) {
+  if (digitalRead(crosspin) == HIGH) {                                         // This uses millis() to detect for how long a button has been held
     first = millis();
     index = 0;
     while (true) {
@@ -123,6 +144,7 @@ bool button() {
     if (last - first > 800) {
       vibrate();
       playmusic("pickup");
+      
     while (true) {
          if(cancelpin()== true){p.close();return false;}
         else{matrix.fillScreen(0);matrix.show();}
@@ -131,10 +153,10 @@ bool button() {
         while(p.running()){
         if(cancelpin()== true){p.close();return false;}
         scrollingmusic();
-        //if(index==7){if(fetchNsketch("epicface",0,7)==false){return true;}}
-        if(index==9){if(fetchNsketch("dragon",0,17)==false){return true;}}
-        //if(index==3){if(fetchNsketch("angel",0,12)==false){return true;}}
-        //if(index==4){if(fetchNsketch("chesth",0,12)==false){return true;}}
+        if(index==7){if(fetchNsketch("epicface",2,7)==false){return false;}}
+        if(index==9){if(fetchNsketch("dragon",2,17)==false){return false;}}
+        if(index==3){if(fetchNsketch("angel",2,12)==false){return false;}}
+        if(index==4){if(fetchNsketch("chesth",2,12)==false){return false;}}
         
         else{matrix.fillScreen(0);matrix.show();}
         }
