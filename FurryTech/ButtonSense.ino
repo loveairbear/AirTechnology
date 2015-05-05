@@ -72,35 +72,63 @@ bool scrollingmusic(){
           }//end meta-if
           else{return false;}
     }//end function
-uint8_t receivemode(){
+uint8_t sendnrecv(uint8_t mode){
       client.loop();
       connection();
-      if(cancelpin()==true){return 1;}//endif
+      
+      if(cancelpin()==true){mqttsig =1 ;return 1;}//endif
 
-      if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // Scroll through last 10 received messages LEFT
+      if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW ) { // Scroll through last 10 received messages LEFT
         vibrate();
-        client.publish(branch, "heart-left");
-        playmusic("light");
-        return 3;
-      }//end if
+        if(mode==3){
+          mqttmsg = "h-l";
+          playmusic("light");
+          return 3;            
+        }
+        if(mode==4){
+          mqttmsg = "s-r";
+          playmusic("bloop");
+          return(4);
+        }
 
+      }//end if    
       if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) { // Scroll through last 10 received messages RIGHT
         vibrate();
-        client.publish(branch, "heart-right");
+        if(mode==3){
+        mqttmsg = "h-l";
         playmusic("light");
-        return 3;
+        return 3;            
+        }
+        if(mode==4){
+        mqttmsg = "s-l";
+        playmusic("bloop");
+        return(4);            
+        }
+
       }//endif
 
       if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { //  ENTER SEND MODE
         vibrate();
+        if(mode==3){
+
         playmusic("mode");      
-        return 2;
+        return 2;            
+        }
+        if(mode==4){
+        vibrate();
+        playmusic("send");
+        client.publish(branch, "s-snd");
+        return (5); // break out of function
+            
+        }
+
       }//endif
-      
-      else{
-        return(0);
-      }
+
     }//end function
+
+void latcher(){if (mqttmsg!=NULL){client.publish(branch,mqttmsg);}} // simple function
+
+
 int last = 0;
 int first = 0;
 
@@ -112,23 +140,20 @@ bool button() {
     connection();
     animode=3; //set animode to inboxmode
     mqttsig=0; // reset mqtt flag signal
-    client.publish(branch, "heartp"); // enter inbox mode
-    client.loop();
-    
+    client.publish(branch, "hrtp"); // enter inbox mode
     while (true) { /// ENTER INBOX MODE 
+      if(mqttsig==1){return true;} // another exit signal coming from the animation infinite loop
       Serial.println(mqttsig);
-      if(receivemode()==1){return false;}//endif
-      if(mqttsig==1){return true;}
-      if(receivemode()==2){
+      latcher();
+      if(sendnrecv(animode)==2){ // enter send mode
         animode=4;
-        while (true){
-          Serial.println(955);
-          if(sendmode()==true){return true;}
-        } //ENTER SENDMODE
-        return true;
-      }//endif
-    }//end while loop for receive mode
-  }//end if for heart button
+        while (mqttsig==0){
+          sendnrecv(animode);
+          latcher();
+        }
+        }
+      }//endinfinitewhile
+    }//end function
            
   /// ENTER PLAYMODE :D ////////
   if (digitalRead(crosspin) == HIGH) {                                         // This uses millis() to detect for how long a button has been held

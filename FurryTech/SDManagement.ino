@@ -63,9 +63,8 @@ bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames){
         
         
         if(cancelpin()==true){mqttsig=1;return (false);}
-        if(mode==2){if(scrollingmusic()==true){return true;}}
-        if(mode==3){if(receivemode()>0){return true;}}
-        if(mode==4){if(sendmode()==true){return true;}}
+        if(sendnrecv(mode)>0){return true;}
+
       } //end forloop
     }//endwhile
   }//endif
