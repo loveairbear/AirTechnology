@@ -62,8 +62,17 @@ uint8_t vibratepin = 11;
 char* branch = "protobear/sig";
 uint8_t index = 0;// global index to scroll through emoticons in sendmode
 
+char* mqttmsg;//global buffer for mqtt, this way i can control how i latch my mqtt messages
+
+
+//Mode and exit flags//
 uint8_t animode=0; // mode signals for program mechanics
 uint8_t mqttsig=0; //exit status for program mechanics
+uint8_t exitsig=0;
+
+
+
+
 const uint8_t soundsize = 14;
 boolean refresh(){
   matrix.fillScreen(0);
@@ -101,8 +110,6 @@ void setup() {
 }
 
 void loop(){
-  heart(3);
-  /*
   
       for(int i = 0;i < 36;i++){
         setPixelColor(idlex[(i)%36],idley[(i)%36],255,0,255,255);
