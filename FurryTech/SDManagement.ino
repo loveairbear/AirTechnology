@@ -62,8 +62,8 @@ bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames){
         delay(350);
         
         
-        if(cancelpin()==true){mqttsig=1;return (false);}
-        if(sendnrecv(mode)>0){return true;}
+        if(mqttsig == 1){return 1;}
+        if(sendnrecv(mode)>0){return mode;}
 
       } //end forloop
     }//endwhile
