@@ -28,19 +28,20 @@ uint8_t brightness = 20;  // UNIVERSAL BRIGHTNESS VALUE FOR MATRIX
 //Should be a multiple of 5
 Process p;
 // MATRIX INTIALIZATION // For airbear FLEXIBLE matrix
-/*
+
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
 NEO_MATRIX_TOP   + NEO_MATRIX_LEFT +
 NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
 NEO_GRB            + NEO_KHZ800);
-*/
+
 
 // For adafruit 8x8 RIGID matrix
+/*
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
 NEO_MATRIX_TOP     + NEO_MATRIX_RIGHT +
 NEO_MATRIX_COLUMNS + NEO_MATRIX_PROGRESSIVE,
 NEO_GRB            + NEO_KHZ800);
-
+*/
 //Ghost Animation
 uint8_t idlex[]={0,1,2,3,3,2,1,0,0,1,2,3,4,5,6,7,6,5,4,4,5,6,7,6,5,4,3,3,2,1,0,0,0};
 

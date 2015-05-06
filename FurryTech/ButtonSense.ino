@@ -76,7 +76,7 @@ uint8_t sendnrecv(uint8_t mode){
       client.loop();
       connection();
       
-      if(cancelpin()==true){mqttsig =1 ;return 1;}//endif
+      if(cancelpin()==true){mqttsig=1 ;return 1;}//endif
 
       if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW ) { // Scroll through last 10 received messages LEFT
         vibrate();
@@ -86,7 +86,7 @@ uint8_t sendnrecv(uint8_t mode){
           return 3;            
         }
         if(mode==4){
-          mqttmsg = "s-r";
+          mqttmsg = "s-l";
           playmusic("bloop");
           return(4);
         }
@@ -95,12 +95,12 @@ uint8_t sendnrecv(uint8_t mode){
       if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) { // Scroll through last 10 received messages RIGHT
         vibrate();
         if(mode==3){
-        mqttmsg = "h-l";
+        mqttmsg = "h-r";
         playmusic("light");
         return 3;            
         }
         if(mode==4){
-        mqttmsg = "s-l";
+        mqttmsg = "s-r";
         playmusic("bloop");
         return(4);            
         }
@@ -123,10 +123,10 @@ uint8_t sendnrecv(uint8_t mode){
         }
 
       }//endif
-
+      else{return 0;}
     }//end function
 
-void latcher(){if (mqttmsg!=NULL){client.publish(branch,mqttmsg);}} // simple function
+void latcher(){if (mqttmsg!=NULL){client.publish(branch,mqttmsg);mqttmsg=NULL;client.loop();}} // simple function
 
 
 int last = 0;
@@ -136,23 +136,26 @@ bool button() {
   if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { // ENTER INBOX MODE
     vibrate();
     playmusic("rcvd"); //
-    
     connection();
+    
     animode=3; //set animode to inboxmode
     mqttsig=0; // reset mqtt flag signal
+    
     client.publish(branch, "hrtp"); // enter inbox mode
-    while (true) { /// ENTER INBOX MODE 
-      if(mqttsig==1){return true;} // another exit signal coming from the animation infinite loop
-      Serial.println(mqttsig);
+    while(true){
       latcher();
-      if(sendnrecv(animode)==2){ // enter send mode
+      if(mqttsig==1){return 1;}
+      if(sendnrecv(animode)==2){
         animode=4;
-        while (mqttsig==0){
+        while(true){
           sendnrecv(animode);
           latcher();
+          if(mqttsig==1){return 1;}
         }
-        }
-      }//endinfinitewhile
+      }
+
+      
+    }
     }//end function
            
   /// ENTER PLAYMODE :D ////////
