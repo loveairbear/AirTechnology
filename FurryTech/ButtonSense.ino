@@ -18,16 +18,15 @@ bool cancelpin() {
   }
 }//end func
 
-bool scrollingmusic(){
+uint8_t scrollingmusic(){
            if (digitalRead(crosspin) == true){
               //to the left!
             p.close();
             index = index-1;
             index = (index % soundsize);
-            Serial.println(index);
             playsongs(char(index));
             delay(500);
-            return true;
+            return 1;
         
          }
         if (digitalRead(circlepin) == true){
@@ -36,42 +35,13 @@ bool scrollingmusic(){
           p.close();
           index = index+1;
           index = index % soundsize;
-          Serial.println(index);
           playsongs(char(index));
           delay(500);
-          return true;        
+          return 1;        
           }
-        else{return false;}
+        if(cancelpin()==true){mqttsig=1 ;return 2;}//endif
+        else{return 0;}
 }//end func
- bool sendmode(){         
-          client.loop();
-          connection();
-          if(cancelpin()==true){return true;}
-          if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW) { // to the left
-            vibrate();
-            client.publish(branch, "scroll-left");
-            playmusic("bloop");
-            client.loop();
-            return(false);
-          }//endif
-
-          if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) { // to the right
-            vibrate();
-            client.publish(branch, "scroll-right");
-            playmusic("bloop");
-            client.loop();
-            return(false);
-          }//endif
-
-          if (digitalRead(heartpin) == HIGH) { // heart button
-            vibrate();
-            vibrate();
-            playmusic("send");
-            client.publish(branch, "scroll-send");
-            return (true); // break out of function
-          }//end meta-if
-          else{return false;}
-    }//end function
 uint8_t sendnrecv(uint8_t mode){
       client.loop();
       connection();
@@ -110,13 +80,15 @@ uint8_t sendnrecv(uint8_t mode){
       if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { //  ENTER SEND MODE
         vibrate();
         if(mode==3){
-
+        animode=4; // set flag to 4 which is sendmode
         playmusic("mode");      
-        return 2;            
+        return 4; // 4 is sendmode            
         }
         if(mode==4){
         vibrate();
         playmusic("send");
+        mqttsig=1;
+        refresh();
         client.publish(branch, "s-snd");
         return (5); // break out of function
             
@@ -137,25 +109,30 @@ bool button() {
     vibrate();
     playmusic("rcvd"); //
     connection();
-    
     animode=3; //set animode to inboxmode
     mqttsig=0; // reset mqtt flag signal
-    
-    client.publish(branch, "hrtp"); // enter inbox mode
+    bool called = true;
     while(true){
-      latcher();
-      if(mqttsig==1){return 1;}
-      if(sendnrecv(animode)==2){
-        animode=4;
+      
+      if(called==true){ // execute once!
+        called=false;
+        client.publish(branch, "hrtp"); // enter inbox mode
+        latcher();
+      }
+      
+      if(animode==4){
         while(true){
           sendnrecv(animode);
           latcher();
           if(mqttsig==1){return 1;}
+          }
         }
-      }
-
       
-    }
+      sendnrecv(animode);
+      latcher();
+      if(mqttsig==1){return 1;}
+
+      }
     }//end function
            
   /// ENTER PLAYMODE :D ////////
@@ -174,20 +151,18 @@ bool button() {
       playmusic("pickup");
       
     while (true) {
-         if(cancelpin()== true){p.close();return false;}
-        else{matrix.fillScreen(0);matrix.show();}
         scrollingmusic();
-        
+        if(mqttsig==1){mqttsig=0;return false;}//reset flag
         while(p.running()){
-        if(cancelpin()== true){p.close();return false;}
-        scrollingmusic();
-        if(index==7){if(fetchNsketch("epicface",2,7)==false){return false;}}
-        if(index==9){if(fetchNsketch("dragon",2,17)==false){return false;}}
-        if(index==3){if(fetchNsketch("angel",2,12)==false){return false;}}
-        if(index==4){if(fetchNsketch("chesth",2,12)==false){return false;}}
-        
-        else{matrix.fillScreen(0);matrix.show();}
+          scrollingmusic();
+          if(mqttsig==1){mqttsig=0;return false;}
+          if(index==7){if(fetchNsketch("epicface",2,7)==true){break;}}
+          if(index==9){if(fetchNsketch("dragon",2,17)==true){break;}}
+          if(index==3){if(fetchNsketch("angel",2,12)==true){break;}}
+          if(index==4){if(fetchNsketch("chesth",2,12)==true){break;}}   
+          else{matrix.fillScreen(0);matrix.show();}
         }
+        
     }//end while
     }
 } //end hold  if

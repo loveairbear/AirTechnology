@@ -47,7 +47,7 @@ else{
 
 bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames){
   char* w = ("/mnt/sda1/Dsprites/");
-  
+  mqttsig=0;
   if(frames!=0){
     while (true){
       for(int i=1 ; i <= frames ; i++){
@@ -55,19 +55,31 @@ bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames){
         char list[2];
         strcpy(path, w); /* copy name into the new var*/
         strcat(path, werd); /* add the extension */
-        strcat(path,itoa(i,list,10));/* add the extension */
+        strcat(path,itoa(i,list,10));/* add the extension */ 
         SDbytes(path,sd);
         free(path);// deallocate memory used for char array
         drawbitmap(sd,mode);
-        delay(350);
+        int firstTime = millis(); // lastTime and firstTime to time infinite loop
+        int lastTime = firstTime;
+        
+        //if(mode==5){if(fcounter==frames){return true;} // this is if you choose to run the animation once
         
         
-        if(mqttsig == 1){return 1;}
-        if(sendnrecv(mode)>0){return mode;}
-
+        while ((lastTime-firstTime)<=350){
+          
+          if(mqttsig == 1){mqttsig=0;return false;} // common exit flag
+          
+          if(mode>2){if(sendnrecv(mode)>0){return true;}} // send and receive mode
+          
+          if(mode==2){
+            if(scrollingmusic()> 0){return true;}
+            } // scrolling through songs in playmode
+          lastTime = millis();
+          }//end delay while loop
       } //end forloop
     }//endwhile
   }//endif
+
  else{
     char* path =(char*)malloc(strlen(w)+strlen(werd)+1+1); /* make space for the new string (should check the return value ...) */
     strcpy(path, w); /* copy name into the new var*/
