@@ -63,7 +63,7 @@ uint8_t vibratepin = 11;
 char* branch = "protobear/sig";
 uint8_t index = 0;// global index to scroll through emoticons in sendmode
 
-char* mqttmsg;//global buffer for mqtt, this way i can control how i latch my mqtt messages
+char* mqttmsg;//global buffer for mqtt, this way i can control how i latch my mqtt messages for latch function
 
 
 //Mode and exit flags//
@@ -91,14 +91,13 @@ void vibrate(){
 void setup() {
   delay(60);
   matrix.begin();
-  Serial.begin(9600);
   matrix.setBrightness(brightness);//Brightness for NEOPIXEL matrix
   matrix.fillScreen(0);
   matrix.show(); 
   Bridge.begin();
   FileSystem.begin();
   playmusic("bloop");
-  heart(2);
+  heart(4);
   pinMode(vibratepin,OUTPUT);
   
   pinMode(heartpin,INPUT);

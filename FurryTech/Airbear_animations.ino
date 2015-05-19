@@ -104,7 +104,7 @@ int heart(uint8_t showing) {
         matrix.show();
       }
     }
-    fader(brightness, 20);
+    fader(brightness, 60);
     refresh();
     return (showing);
   }
