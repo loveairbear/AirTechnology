@@ -7,7 +7,12 @@ Launching in August comes a modern plush which makes us remember when we were ki
 
 
 This code only works for the Arduino Yun. :(
-
+##Checkout the Kickstarter!
+1. Launching in August! meanwhile join the party below
+2. Main site - http://loveairbear.com
+3. Blog - http://loveairbear.tumblr.com/
+4. Twitter - https://twitter.com/loveairbear
+5. Instagram - https://instagram.com/airbearplush/
 
 ##Dependencies
 
