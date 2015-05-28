@@ -1,20 +1,21 @@
 
 
 //AIRBEAR ANIMATIONS
-uint8_t heartx[]  = {4, 5, 6, 7, 7, 6, 5, 4, 3, 2, 1, 1, 2, 3, 2};//Outer layer of the heart
-uint8_t hearty[]  = {5, 4, 3, 2, 1, 0, 0, 1, 0, 0, 1, 2, 3, 4, 3};
+/*
+const uint8_t heartx[]  = {4, 5, 6, 7, 7, 6, 5, 4, 3, 2, 1, 1, 2, 3, 2};//Outer layer of the heart
+const uint8_t hearty[]  = {5, 4, 3, 2, 1, 0, 0, 1, 0, 0, 1, 2, 3, 4, 3};
 
-uint8_t heartx1[] = {4, 5, 6, 6, 5, 4, 3, 2, 2, 3};//Middle layer of the heart
-uint8_t hearty1[] = {4, 3, 2, 1, 1, 2, 1, 1, 2, 3};
+const uint8_t heartx1[] = {4, 5, 6, 6, 5, 4, 3, 2, 2, 3};//Middle layer of the heart
+const uint8_t hearty1[] = {4, 3, 2, 1, 1, 2, 1, 1, 2, 3};
 
-uint8_t heartx2[] = {4, 5, 3}; //Core of the heart
-uint8_t hearty2[] = {3, 2, 2};
+const uint8_t heartx2[] = {4, 5, 3}; //Core of the heart
+const uint8_t hearty2[] = {3, 2, 2};
+*/
 
 
 
-
-void setPixelColor( uint16_t x, int y, uint8_t r, uint8_t g, uint8_t b, uint16_t brightness) {
-  int  color = matrix.Color((brightness * r / 255) , (brightness * g / 255), (brightness *b / 255)); // the pgm_read is exponential gamma correction
+void setPixelColor( uint16_t x, int y,uint8_t Pixcolor[], uint16_t cbrightness) {
+  int  color = matrix.Color((cbrightness * Pixcolor[0] / 255) , (cbrightness * Pixcolor[1] / 255), (cbrightness * Pixcolor[2] / 255)); // the pgm_read is exponential gamma correction
   matrix.drawPixel(x, y, color);
   matrix.show();
 }
@@ -35,8 +36,8 @@ uint32_t Wheel(byte WheelPos) { // The Color Wheel which will select a color bas
     return matrix.Color(0, WheelPos * 3, 255 - WheelPos * 3);
   }
 }
-
-int heart(uint8_t showing) {
+uint8_t heart(uint8_t showing) {
+  /*
   if (showing == 1) { //
     matrix.setBrightness(brightness);
 
@@ -104,7 +105,7 @@ int heart(uint8_t showing) {
         matrix.show();
       }
     }
-    fader(brightness, 60);
+    fader(brightness, 100);
     refresh();
     return (showing);
   }
@@ -130,7 +131,7 @@ int heart(uint8_t showing) {
       matrix.show();
     }
     return (showing);
-  }
+  }*/
 }
 /*
 
@@ -177,24 +178,48 @@ void lightningstorm(){
   matrix.fillScreen(0);
 }
 */
-void hug(char werd[]){
+
+void hug(char* werd){ // this function is retarded
   char* w = "/mnt/sda1/Dsprites/";
   char* path =(char*)malloc(strlen(w)+strlen(werd)+1); /* make space for the new string (should check the return value ...) */
   strcpy(path, w); /* copy name into the new var, used strncpy to combat buffer overflow*/
   strcat(path, werd); /* add the extension */
   SDbytes(path,sd);
-  for(int i = 0; i <= 255; i++){
+  for(int i = 0; i <= brightness; i++){
     matrix.setBrightness(i);
     drawbitmap(sd,0);
+    if(sendnrecv(animode)>0){break;}
   
   }
     for(int i = 255; i>=0; i--){
     matrix.setBrightness(i);
     drawbitmap(sd,0);
+    if(sendnrecv(animode)>0){break;}
     delay(2);
   
   }
 matrix.setBrightness(brightness);
+}
+void pulse(){// pulses anything displayed on the matrix
+  for(int i = brightness; i <= (brightness+50) ; i+=1){
+    matrix.setBrightness(i);
+    matrix.show();
+    delay(10);
+  }
+  delay(500);
+  for(int i = (brightness+50); i>=brightness; i-=1){
+    matrix.setBrightness(i);
+    matrix.show();
+    delay(15);
+  
+  }
+  
+
+  delay(500);
+  matrix.setBrightness(brightness);
+  
+
+  
 }
 
 void fader(int prebrightness, int timer) {

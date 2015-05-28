@@ -2,10 +2,8 @@
   ____,__, ____, ____ ____, ____,____, 
  (-/_|(-| (-|__)(-|__|-|_, (-/_|(-|__) 
  _/  |,_|_,_|  \,_|__)_|__,_/  |,_|  \,
- 
- birthed by QIA, the next newtype
- 
- 
+
+Be nice to other people 
 */
 #include <Adafruit_GFX.h>
 #include <Adafruit_NeoMatrix.h>
@@ -16,16 +14,14 @@
 
 #include <Bridge.h>  
 
-#include <SPI.h>
-
 #include <PubSubClient.h>
 
 #include <YunClient.h>
 
 #include <Process.h>
 
-uint8_t brightness = 20;  // UNIVERSAL BRIGHTNESS VALUE FOR MATRIX
-//Should be a multiple of 5
+
+
 Process p;
 // MATRIX INTIALIZATION // For airbear FLEXIBLE matrix
 
@@ -43,9 +39,9 @@ NEO_MATRIX_COLUMNS + NEO_MATRIX_PROGRESSIVE,
 NEO_GRB            + NEO_KHZ800);
 */
 //Ghost Animation
-uint8_t idlex[]={0,1,2,3,3,2,1,0,0,1,2,3,4,5,6,7,6,5,4,4,5,6,7,6,5,4,3,3,2,1,0,0,0};
+const uint8_t idlex[]={0,1,2,3,3,2,1,0,0,1,2,3,4,5,6,7,6,5,4,4,5,6,7,6,5,4,3,3,2,1,0,0,0};
 
-uint8_t idley[]={0,1,1,2,3,4,4,5,6,7,7,6,6,7,7,6,5,5,4,3,2,2,1,0,0,0,1,2,3,3,2,1,0};
+const uint8_t idley[]={0,1,1,2,3,4,4,5,6,7,7,6,6,7,7,6,5,5,4,3,2,2,1,0,0,0,1,2,3,3,2,1,0};
 
 /* VARIABLES FOR MQTT */
 YunClient yun;
@@ -63,18 +59,22 @@ uint8_t vibratepin = 11;
 char* branch = "protobear/sig";
 uint8_t index = 0;// global index to scroll through emoticons in sendmode
 
+//LATCHER GLOBAL VAR//
 char* mqttmsg;//global buffer for mqtt, this way i can control how i latch my mqtt messages for latch function
-
 
 //Mode and exit flags//
 uint8_t animode=0; // mode signals for program mechanics
 uint8_t mqttsig=0; //exit status for program mechanics
 uint8_t exitsig=0;
+bool notificationflag=false;
 
 
 
+//INTERFACED VARS
+uint8_t brightness = 40;  // UNIVERSAL BRIGHTNESS VALUE FOR MATRIX
+uint8_t GhostColor[]={0,255,255}; // This is the idle animation which also provides push notification
 
-const uint8_t soundsize = 14;
+uint8_t soundsize = 14;
 boolean refresh(){
   matrix.fillScreen(0);
   matrix.show();
@@ -89,39 +89,57 @@ void vibrate(){
 
 
 void setup() {
-  delay(60);
+  delay(200);
+  Bridge.begin();
+  FileSystem.begin();
   matrix.begin();
   matrix.setBrightness(brightness);//Brightness for NEOPIXEL matrix
   matrix.fillScreen(0);
   matrix.show(); 
-  Bridge.begin();
-  FileSystem.begin();
-  playmusic("bloop");
-  heart(4);
+  matrix.setTextWrap(false);
+  matrix.setTextColor(matrix.Color(255,255,255));
   pinMode(vibratepin,OUTPUT);
-  
   pinMode(heartpin,INPUT);
   pinMode(squarepin, INPUT);
   pinMode(crosspin, INPUT);
   pinMode(circlepin,INPUT);
   client.connect("arduinoClient","fnhnuaqc","uHKb4wF1tRKe");
   connection(); // function to connect to mqtt server 
+  playmusic("bloop");
+  fetchNsketch("monkey",1,0,false);
   vibrate();
 }
 
 void loop(){
-  
+  /*
+  fetchNsketch("chat",5,7,true);
+  delay(4000);
+  fetchNsketch("moon",5,8,true);
+  delay(4000);
+  fetchNsketch("sun",5,7,true);
+  delay(4000);
+  fetchNsketch("at",5,0,false);
+  pulse();
+  pulse();
+  //hug("at.bmp");
+  delay(2000);
+  */
+
       for(int i = 0;i < 36;i++){
-        setPixelColor(idlex[(i)%36],idley[(i)%36],255,0,255,255);
-        setPixelColor(idlex[(i-1)%36],idley[(i-1)%36],255,0,255,100);
-        setPixelColor(idlex[(i-2)%36],idley[(i-2)%36],255,0,255,60);
-        setPixelColor(idlex[(i-3)%36],idley[(i-3)%36],255,0,255,30);
-        setPixelColor(idlex[(i-4)%36],idley[(i-4)%36],255,0,255,10);
+        if(notificationflag==true && i%2==0){ // if the notification flag is active then create arrowhead around ghost
+          matrix.drawPixel(idlex[(i)%36],idley[(i)%36]-1,matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
+          matrix.drawPixel(idlex[(i)%36]+1,idley[(i)%36]-1,matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
+          matrix.drawPixel(idlex[(i)%36]+1,idley[(i)%36],matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
+        }
+        setPixelColor(idlex[(i)%36],idley[(i)%36],GhostColor,255);
+        setPixelColor(idlex[(i-1)%36],idley[(i-1)%36],GhostColor,150);
+        setPixelColor(idlex[(i-2)%36],idley[(i-2)%36],GhostColor,125);
+        setPixelColor(idlex[(i-3)%36],idley[(i-3)%36],GhostColor,100);
         matrix.show();
         button();
-        connection();
         client.loop(); 
-        delay(200);
+        delay(180);
+        refresh();
       }
       refresh();
       //for(int i=0;i<10000;i++){button();client.loop(); }

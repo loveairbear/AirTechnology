@@ -29,7 +29,6 @@ void SDbytes(char path[], int sdarray[]) {
 
 
 void getem(char filepath[], int colorbuffer[64]) {
-  //Serial.println("function opened");
   int r = 0;
   int g = 0;  //initializing/resetting  all colors and all values
   int b = 0;
@@ -37,7 +36,7 @@ void getem(char filepath[], int colorbuffer[64]) {
   int seeking = 51;
   //int seeking = 54; // location of color code in binary/hex
   File  thebmp = FileSystem.open(filepath, FILE_READ);
-  Serial.println(thebmp);
+  
 
 
   //int  colorbuffer[64]; // a temporary array where the converted rgb values will be stored
@@ -172,16 +171,16 @@ void setup() {
   matrix.fillScreen(0);
   Bridge.begin();
   FileSystem.begin();
-  Serial.begin(9600);
   digitalWrite(13, LOW);
 }
 
 
 void loop() {
-  //render("evey.bmp");
-  //fullpkg("eau",6);
-  //fullpkg("creeperd",23);
-  //fullpkg("kissy",16);
+  
+  fullpkg("chat",7);
+  fullpkg("moon",8);
+  fullpkg("sun",7);
+  render("at.bmp");
   //fullpkg("meteor",14);
   //fullpkg("tama",6);
   //fullpkg("cloud",11);
