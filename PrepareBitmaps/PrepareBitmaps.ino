@@ -62,7 +62,7 @@ void getem(char filepath[], int colorbuffer[64]) {
       if (i = 3) {
         r = thebmp.read();
 
-        bitmapcolor = matrix.Color(onlypos(r, 40), g, b); //this value acts as a temporary storage to then place in the other storage
+        bitmapcolor = matrix.Color(onlypos(r, 65),g, b); //this value acts as a temporary storage to then place in the other storage
       }
     }
     colorbuffer[x] = bitmapcolor;  //this then appends the bitmapcolor value in, if you read the values here they arnt standard RGB or HEX
@@ -168,7 +168,7 @@ void setup() {
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);
   matrix.begin();
-  matrix.setBrightness(100);
+  matrix.setBrightness(255);
   matrix.fillScreen(0);
   Bridge.begin();
   FileSystem.begin();
@@ -179,14 +179,11 @@ void setup() {
 
 void loop() {
   //render("evey.bmp");
-  //fullpkg("eau",6);
-  //fullpkg("creeperd",23);
-  //fullpkg("kissy",16);
-  //fullpkg("meteor",14);
-  //fullpkg("tama",6);
-  //fullpkg("cloud",11);
-  digitalWrite(13, HIGH);
-  delay(20000);
-  digitalWrite(13, LOW);
+  fullpkg("eau",6);
+  fullpkg("creeperd",23);
+  fullpkg("kissy",16);
+  fullpkg("meteor",14);
+  fullpkg("tama",6);
+  fullpkg("cloud",11);
 
 }

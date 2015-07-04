@@ -45,9 +45,10 @@ else{
 }
 
 
-bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames){
+bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames,bool still){
   char* w = ("/mnt/sda1/Dsprites/");
   mqttsig=0;
+  
   if(frames!=0){
     while (true){
       for(int i=1 ; i <= frames ; i++){
@@ -60,11 +61,7 @@ bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames){
         free(path);// deallocate memory used for char array
         drawbitmap(sd,mode);
         int firstTime = millis(); // lastTime and firstTime to time infinite loop
-        int lastTime = firstTime;
-        
-        //if(mode==5){if(fcounter==frames){return true;} // this is if you choose to run the animation once
-        
-        
+        int lastTime = firstTime; 
         while ((lastTime-firstTime)<=350){
           
           if(mqttsig == 1){mqttsig=0;return false;} // common exit flag
@@ -76,8 +73,9 @@ bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames){
             } // scrolling through songs in playmode
           lastTime = millis();
           }//end delay while loop
-      } //end forloop
-    }//endwhile
+        } //end forloop
+        if(still==true){return true;} // this is if you choose to run the animation once
+      }//endwhile
   }//endif
 
  else{
