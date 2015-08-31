@@ -63,10 +63,11 @@ bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames,bool still){
         int firstTime = millis(); // lastTime and firstTime to time infinite loop
         int lastTime = firstTime; 
         while ((lastTime-firstTime)<=350){
-          
+          latcher();
+          client.loop();
           if(mqttsig == 1){mqttsig=0;return false;} // common exit flag
           
-          if(mode>2){if(sendnrecv(mode)>0){return true;}} // send and receive mode
+          if(mode>2){if(sendnrecv(mode)>0){latcher();return true;}} // send and receive mode
           
           if(mode==2){
             if(scrollingmusic()> 0){return true;}

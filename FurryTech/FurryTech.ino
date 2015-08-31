@@ -51,13 +51,14 @@ PubSubClient client("m10.cloudmqtt.com",16233,callback,yun);
 
 
 /* VARIABLES FOR BUTTONS */
- uint8_t heartpin  = 9; // blue button -- left paw
- uint8_t squarepin  = 8; //grey button -- right paw
- uint8_t crosspin  = 6; //red button --left foot
- uint8_t circlepin  = 5; // yellow button -- right foot
+#define heartpin 9 // blue button -- left paw
+#define squarepin 8 //grey button -- right paw
+#define hugpin 7
+#define crosspin 6 //red button --left foot
+#define circlepin 5 // yellow button -- right foot
 
 int sd[64]; //buffer array for bitmap rendering
-uint8_t vibratepin = 11;
+#define vibratepin 11
 char* branch = "protobear/sig";
 uint8_t index = 0;// global index to scroll through emoticons in sendmode
 
@@ -74,6 +75,8 @@ bool notificationflag=false;
 uint8_t GhostColor[]={0,255,255}; // This is the idle animation which also provides push notification
 uint8_t brightness = 255;  // Should be a multiple of 5
 const uint8_t soundsize = 14;
+int firstghostcolortimer=millis();
+int lastghostcolortimer=millis();
 
 boolean refresh(){
   matrix.fillScreen(0);
@@ -92,6 +95,7 @@ void setup() {
   delay(200);
   Bridge.begin();
   FileSystem.begin();
+  Serial.begin(9600);
   matrix.begin();
   matrix.setBrightness(brightness);//Brightness for NEOPIXEL matrix
   matrix.fillScreen(0);
@@ -103,14 +107,53 @@ void setup() {
   pinMode(squarepin, INPUT);
   pinMode(crosspin, INPUT);
   pinMode(circlepin,INPUT);
+  pinMode(hugpin,INPUT);
   client.connect("arduinoClient","fnhnuaqc","uHKb4wF1tRKe");
   connection(); // function to connect to mqtt server 
-  playmusic("startup");
+  playmusic("light");
   //fetchNsketch("monkey",1,0,false);
   vibrate();
+  Serial.println("started");
 }
 
 void loop(){
+  
+  matrix.setBrightness(brightness);
+  fetchNsketch("hb",0,2,true);
+  fetchNsketch("hb",0,2,true);
+    fetchNsketch("hb",0,2,true);
+  fetchNsketch("hb",0,2,true);
+  fetchNsketch("muzak",0,2,true);
+  fetchNsketch("muzak",0,2,true);
+    fetchNsketch("muzak",0,2,true);
+  fetchNsketch("muzak",0,2,true);
+  lightningstorm();
+  lightningstorm();
+  lightningstorm();
+  lightningstorm();
+  fetchNsketch("at",1,0,false);
+  for(int i = 255;i>=0;i-=5){
+    matrix.setBrightness(i);
+    matrix.show();
+    delay(5);
+  }
+    fetchNsketch("at",1,0,false);
+  for(int i = 255;i>=0;i-=5){
+    matrix.setBrightness(i);
+    matrix.show();
+    delay(5);
+  }
+  fetchNsketch("at",1,0,false);
+  for(int i = 255;i>=0;i-=5){
+    matrix.setBrightness(i);
+    matrix.show();
+    delay(5);
+  }
+  matrix.setBrightness(250);
+  fetchNsketch("sun",5,7,true);
+  fetchNsketch("sun",5,7,true);
+  fetchNsketch("sun",5,7,true);
+  fetchNsketch("sun",5,7,true);
   /*
   fetchNsketch("cloud",animode,11,true);
   fetchNsketch("chesth",animode,12,true);
@@ -118,13 +161,16 @@ void loop(){
   fetchNsketch("kissy",animode,16,true);
   */
   
+  /*
+  client.loop();
+      connection();
       for(int i = 0;i < 36;i++){
         if(notificationflag==true && i%2==0){ // if the notification flag is active then create arrowhead around ghost
           matrix.drawPixel(idlex[(i)%36],idley[(i)%36]-1,matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
           matrix.drawPixel(idlex[(i)%36]+1,idley[(i)%36]-1,matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
           matrix.drawPixel(idlex[(i)%36]+1,idley[(i)%36],matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
         }
-        setPixelColor(idlex[(i)%36],idley[(i)%36],GhostColor,255);
+        setPixelColor(idlex[(i)%37],idley[(i)%36],GhostColor,255);
         setPixelColor(idlex[(i-1)%36],idley[(i-1)%36],GhostColor,150);
         setPixelColor(idlex[(i-2)%36],idley[(i-2)%36],GhostColor,125);
         setPixelColor(idlex[(i-3)%36],idley[(i-3)%36],GhostColor,100);
@@ -136,6 +182,6 @@ void loop(){
       }
       refresh();
       //for(int i=0;i<10000;i++){button();client.loop(); }
-      connection();
+      */
 
 }

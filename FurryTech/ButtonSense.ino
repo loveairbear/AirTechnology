@@ -113,13 +113,19 @@ bool button() {
     
     first = millis();
     while (true) {
-      if (digitalRead(squarepin) == LOW) {
+      client.loop();
+      if (digitalRead(heartpin) == LOW) {
         last = millis();
         break;
       }//endif
     }//endwhile
     
-    if (last - first > 800) {} //enter settings mode
+    if (last - first > 800) {
+      p.begin("python");
+      p.addParameter("/mnt/sda1/libpy/vce.py");
+      p.run();
+    
+    } //enter settings mode
     
     else{
     vibrate();
@@ -144,16 +150,28 @@ bool button() {
         called=false;
         client.publish(branch, "hrtp"); // enter inbox mode
         latcher();
-        client.loop();
-        delay(500);//safety delay
-      }//end if
+        for(int i=0;i<10;i++){        client.loop();}
 
+      }//end if
+      first=millis();
+      while(last-first<500){
+        client.loop();
+        last=millis();
+      
+      }
       if(animode==4){
-        delay(1000);// another safety delay
+        client.loop();
+        first=millis();
+        while(last-first<500){
+        client.loop();
+        last=millis();
+        
+        }
         while(true){
           client.loop();
           sendnrecv(animode);
           latcher();
+          client.loop();
           if(mqttsig==1){return 1;}
           }//end infinite while loop
          }//endif
@@ -162,6 +180,8 @@ bool button() {
       sendnrecv(animode);// the sendnrecv function either prepares a string which would be used by latcher() which sends mqtt or
       //exit while modifying the animode variable thus changing to send mode (or can exit using mqttsig flag)
       latcher();
+      
+      client.loop();
       if(mqttsig==1){return 1;}
       
       }//end infinite while loop
@@ -188,10 +208,10 @@ bool button() {
         while(p.running()){
           scrollingmusic();
           if(mqttsig==1){mqttsig=0;return false;}
-          if(index==7){if(fetchNsketch("epicface",2,7,false)==true){break;}}
-          if(index==9){if(fetchNsketch("dragon",2,17,false)==true){break;}}
-          if(index==3){if(fetchNsketch("angel",2,12,false)==true){break;}}
-          if(index==4){if(fetchNsketch("chesth",2,12,false)==true){break;}}   
+          if(index==7){if(fetchNsketch("epicface",2,7,false)==true){return true;}}
+          if(index==9){if(fetchNsketch("dragon",2,17,false)==true){return true;}}
+          if(index==3){if(fetchNsketch("angel",2,12,false)==true){return true;}}
+          if(index==4){if(fetchNsketch("chesth",2,12,false)==true){return true;}}   
           else{matrix.fillScreen(0);matrix.show();}
         }
         
@@ -236,10 +256,18 @@ bool button() {
 
     vibrate();
     playmusic("bloop");
-    hug("circle1");
-    hug("circle2");
-    hug("circle3");
-    
+    fetchNsketch("eau1",1,0,false);
+    while(true){
+      if(cancelpin()){return true;}
+      if(digitalRead(heartpin)==HIGH){
+        fetchNsketch("eau",0,6,true);
+        fetchNsketch("tama",0,6,true);
+        fetchNsketch("tama",0,6,true);
+        refresh();
+        return true;
+        
+      }
+    }
     return (true);
   }
 

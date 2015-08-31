@@ -179,11 +179,12 @@ void setup() {
 
 void loop() {
   //render("evey.bmp");
-  fullpkg("eau",6);
-  fullpkg("creeperd",23);
-  fullpkg("kissy",16);
-  fullpkg("meteor",14);
-  fullpkg("tama",6);
-  fullpkg("cloud",11);
+  fullpkg("muzak",2);
+  //fullpkg("creeperd",23);
+ // fullpkg("kissy",16);
+  //fullpkg("meteor",14);
+  //fullpkg("tama",6);
+  //fullpkg("cloud",11);
+  delay(50000);
 
 }

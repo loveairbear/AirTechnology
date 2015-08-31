@@ -111,8 +111,8 @@ int heart(uint8_t showing) {
     return (showing);
   }
 
-
 */
+
   if (showing == 4) {// Red Heart
     matrix.setBrightness(brightness);    
     for (uint8_t lol = 0;  lol < 15 ; lol++) {
@@ -134,7 +134,6 @@ int heart(uint8_t showing) {
     return (showing);
   }
 }
-/*
 
 void lightningstorm(){
 
@@ -178,7 +177,8 @@ void lightningstorm(){
   delay(1000);
   matrix.fillScreen(0);
 }
-*/
+
+
 void hug(char werd[]){
   char* w = "/mnt/sda1/Dsprites/";
   char* path =(char*)malloc(strlen(w)+strlen(werd)+1); /* make space for the new string (should check the return value ...) */
@@ -199,6 +199,7 @@ void hug(char werd[]){
 matrix.setBrightness(brightness);
 }
 void pulse(){// pulses anything displayed on the matrix
+  if(brightness<200){
   for(int i = brightness; i <= (brightness+50) ; i+=1){
     matrix.setBrightness(i);
     matrix.show();
@@ -216,7 +217,7 @@ void pulse(){// pulses anything displayed on the matrix
   delay(500);
   matrix.setBrightness(brightness);
   
-
+  }
   
 }
 void fader(int prebrightness, int timer) {

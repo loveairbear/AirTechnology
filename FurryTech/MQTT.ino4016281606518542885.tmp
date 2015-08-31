@@ -28,29 +28,18 @@ boolean connection() {
 
 void callback(char* topic, byte* payload, unsigned int length) {
   refresh();
- uint8_t number=0;
- uint8_t multiplier=0;
   
-  for(int n=0;n<length;n++){
-    number = number*multiplier+(payload[n]-48);
-    multiplier += 10;
-  }
-  
-  Serial.println(number);
-  /*
+  uint8_t number = 0;
   uint8_t multiplier = 0;
   for(int i = 0 ; i < 2 ; i++){
       if(0 < (int)payload[i]-48 && (int)payload[i]-48!= 255 ){ // the process is to cast integer on first byte of payload array, 
         number = number*multiplier + (int)payload[i] - 48; // then subtract integer cast byte equivalent of "0" which is 48, so 3 in bytes is 51 then subtract
         multiplier += 10; 
       }//endif
-      if(0<((int)payload[0]-48) && ((int)payload[1]-48)==0){
-        number=((int)payload[0]-48)*10;
-      }
     }// end forloop
   Serial.println((int)payload[0]-48);
+  Serial.println((int)payload[1]-48);
   Serial.println(number);
-     */
       /*
     For some reason, the number 10 cannot be parsed 
   */ 
@@ -101,12 +90,15 @@ void callback(char* topic, byte* payload, unsigned int length) {
       matrix.show();
       delay(120);
       matrix.show();
-    }//
+    }
+  
   }
   if(number==24){fetchNsketch("moon",5,8,true);}
   if(number==25){fetchNsketch("sun",5,7,true);}
   if(number==26){fetchNsketch("at",1,0,false);}
   if(number==27){fetchNsketch("chat",animode,6,false);}
+  
+  
   else{
     connection();
     matrix.setBrightness(brightness);
