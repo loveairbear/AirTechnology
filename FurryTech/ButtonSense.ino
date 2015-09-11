@@ -39,7 +39,6 @@ uint8_t scrollingmusic(){
           delay(500);
           return 1;        
           }
-        if(cancelpin()==true){mqttsig=1 ;return 2;}//endif
         else{return 0;}
 }//end func
 uint8_t sendnrecv(uint8_t mode){
@@ -123,7 +122,11 @@ bool button() {
     if (last - first > 800) {
       p.begin("python");
       p.addParameter("/mnt/sda1/libpy/vce.py");
-      p.run();
+      p.runAsynchronously();
+      while(p.running()){
+        fetchNsketch("muzak",0,2,false);
+        if(cancelpin()==true){p.close();return true;}
+      }
     
     } //enter settings mode
     
@@ -150,40 +153,22 @@ bool button() {
         called=false;
         client.publish(branch, "hrtp"); // enter inbox mode
         latcher();
-        for(int i=0;i<10;i++){        client.loop();}
-
       }//end if
-      first=millis();
-      while(last-first<500){
-        client.loop();
-        last=millis();
+      delay(500);
+      sendnrecv(animode);// the sendnrecv function either prepares a string which would be used by latcher() which sends mqtt or
+      //exit while modifying the animode variable thus changing to send mode (or can exit using mqttsig flag)
+      latcher();
+      if(mqttsig==1){return 1;}
       
-      }
       if(animode==4){
         client.loop();
-        first=millis();
-        while(last-first<500){
-        client.loop();
-        last=millis();
-        
-        }
         while(true){
-          client.loop();
           sendnrecv(animode);
           latcher();
           client.loop();
           if(mqttsig==1){return 1;}
           }//end infinite while loop
-         }//endif
-         
-      client.loop();
-      sendnrecv(animode);// the sendnrecv function either prepares a string which would be used by latcher() which sends mqtt or
-      //exit while modifying the animode variable thus changing to send mode (or can exit using mqttsig flag)
-      latcher();
-      
-      client.loop();
-      if(mqttsig==1){return 1;}
-      
+        }//endif
       }//end infinite while loop
     }//end else
   }//end if
@@ -198,25 +183,25 @@ bool button() {
         break;
       }//endif
     }//endwhile
-    
-    if (last - first > 800) {
+    if (last - first >= 500) {
       vibrate();
       playmusic("pickup");
       while (true) {
       scrollingmusic();
-      if(mqttsig==1){mqttsig=0;return false;}//reset flag
+      if(cancelpin()==true){mqttsig=0;return false;}
         while(p.running()){
           scrollingmusic();
-          if(mqttsig==1){mqttsig=0;return false;}
-          if(index==7){if(fetchNsketch("epicface",2,7,false)==true){return true;}}
-          if(index==9){if(fetchNsketch("dragon",2,17,false)==true){return true;}}
-          if(index==3){if(fetchNsketch("angel",2,12,false)==true){return true;}}
-          if(index==4){if(fetchNsketch("chesth",2,12,false)==true){return true;}}   
-          else{matrix.fillScreen(0);matrix.show();}
+          if(cancelpin()==true){p.close();mqttsig=0;return false;}
+          if(index==7){fetchNsketch("epicface",2,7,true);}
+          if(index==9){fetchNsketch("dragon",2,17,true);}
+          if(index==3){fetchNsketch("angel",2,12,true);}
+          if(index==4){fetchNsketch("chesth",2,12,true);}   
+          else{fetchNsketch("muzak",0,2,true);}
         }
         
     }//end while
     }//end if
+    else{return false;}
 } //end button if
 
 /// END PLAYMODE /////////////////

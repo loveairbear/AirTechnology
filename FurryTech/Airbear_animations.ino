@@ -2,14 +2,7 @@
 
 //AIRBEAR ANIMATIONS
 
-uint8_t heartx[]  = {4, 5, 6, 7, 7, 6, 5, 4, 3, 2, 1, 1, 2, 3, 2};//Outer layer of the heart
-uint8_t hearty[]  = {5, 4, 3, 2, 1, 0, 0, 1, 0, 0, 1, 2, 3, 4, 3};
 
-uint8_t heartx1[] = {4, 5, 6, 6, 5, 4, 3, 2, 2, 3};//Middle layer of the heart
-uint8_t hearty1[] = {4, 3, 2, 1, 1, 2, 1, 1, 2, 3};
-
-uint8_t heartx2[] = {4, 5, 3}; //Core of the heart
-uint8_t hearty2[] = {3, 2, 2};
 
 
 
@@ -38,6 +31,14 @@ uint32_t Wheel(byte WheelPos) { // The Color Wheel which will select a color bas
 }
 
 int heart(uint8_t showing) {
+  uint8_t heartx[]  = {4, 5, 6, 7, 7, 6, 5, 4, 3, 2, 1, 1, 2, 3, 2};//Outer layer of the heart
+uint8_t hearty[]  = {5, 4, 3, 2, 1, 0, 0, 1, 0, 0, 1, 2, 3, 4, 3};
+
+uint8_t heartx1[] = {4, 5, 6, 6, 5, 4, 3, 2, 2, 3};//Middle layer of the heart
+uint8_t hearty1[] = {4, 3, 2, 1, 1, 2, 1, 1, 2, 3};
+
+uint8_t heartx2[] = {4, 5, 3}; //Core of the heart
+uint8_t hearty2[] = {3, 2, 2};
   /*
   if (showing == 1) { //
     matrix.setBrightness(brightness);
@@ -110,8 +111,8 @@ int heart(uint8_t showing) {
     refresh();
     return (showing);
   }
-
 */
+
 
   if (showing == 4) {// Red Heart
     matrix.setBrightness(brightness);    

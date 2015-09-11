@@ -32,6 +32,7 @@ NEO_MATRIX_TOP   + NEO_MATRIX_LEFT +
 NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
 NEO_GRB            + NEO_KHZ800);
 
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(64, PIN, NEO_GRB + NEO_KHZ800);
 
 // For adafruit 8x8 RIGID matrix
 /*
@@ -72,7 +73,7 @@ uint8_t exitsig=0;
 bool notificationflag=false;
 
 //Interfaced vars
-uint8_t GhostColor[]={0,255,255}; // This is the idle animation which also provides push notification
+uint8_t GhostColor[]={255,255,0}; // This is the idle animation which also provides push notification
 uint8_t brightness = 255;  // Should be a multiple of 5
 const uint8_t soundsize = 14;
 int firstghostcolortimer=millis();
@@ -93,9 +94,9 @@ void vibrate(){
 
 void setup() {
   delay(200);
+  strip.begin();
   Bridge.begin();
   FileSystem.begin();
-  Serial.begin(9600);
   matrix.begin();
   matrix.setBrightness(brightness);//Brightness for NEOPIXEL matrix
   matrix.fillScreen(0);
@@ -113,24 +114,35 @@ void setup() {
   playmusic("light");
   //fetchNsketch("monkey",1,0,false);
   vibrate();
-  Serial.println("started");
 }
 
 void loop(){
-  
+  /*
+  heart(1);
+  heart(2);
+  heart(3);
+  heart(4);
+  delay(3000);
+  /*
+  fetchNsketch("angel",2,12,false);
+  /*
   matrix.setBrightness(brightness);
   fetchNsketch("hb",0,2,true);
   fetchNsketch("hb",0,2,true);
     fetchNsketch("hb",0,2,true);
   fetchNsketch("hb",0,2,true);
+ */
+ /*
   fetchNsketch("muzak",0,2,true);
   fetchNsketch("muzak",0,2,true);
     fetchNsketch("muzak",0,2,true);
   fetchNsketch("muzak",0,2,true);
+  /*
   lightningstorm();
   lightningstorm();
   lightningstorm();
   lightningstorm();
+  /*
   fetchNsketch("at",1,0,false);
   for(int i = 255;i>=0;i-=5){
     matrix.setBrightness(i);
@@ -149,6 +161,42 @@ void loop(){
     matrix.show();
     delay(5);
   }
+    fetchNsketch("at",1,0,false);
+  for(int i = 255;i>=0;i-=5){
+    matrix.setBrightness(i);
+    matrix.show();
+    delay(5);
+  }
+    fetchNsketch("at",1,0,false);
+  for(int i = 255;i>=0;i-=5){
+    matrix.setBrightness(i);
+    matrix.show();
+    delay(5);
+  }
+  fetchNsketch("at",1,0,false);
+  for(int i = 255;i>=0;i-=5){
+    matrix.setBrightness(i);
+    matrix.show();
+    delay(5);
+  }  fetchNsketch("at",1,0,false);
+  for(int i = 255;i>=0;i-=5){
+    matrix.setBrightness(i);
+    matrix.show();
+    delay(5);
+  }
+    fetchNsketch("at",1,0,false);
+  for(int i = 255;i>=0;i-=5){
+    matrix.setBrightness(i);
+    matrix.show();
+    delay(5);
+  }
+  fetchNsketch("at",1,0,false);
+  for(int i = 255;i>=0;i-=5){
+    matrix.setBrightness(i);
+    matrix.show();
+    delay(5);
+  }
+  /*
   matrix.setBrightness(250);
   fetchNsketch("sun",5,7,true);
   fetchNsketch("sun",5,7,true);
@@ -161,7 +209,6 @@ void loop(){
   fetchNsketch("kissy",animode,16,true);
   */
   
-  /*
   client.loop();
       connection();
       for(int i = 0;i < 36;i++){
@@ -171,8 +218,8 @@ void loop(){
           matrix.drawPixel(idlex[(i)%36]+1,idley[(i)%36],matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
         }
         setPixelColor(idlex[(i)%37],idley[(i)%36],GhostColor,255);
-        setPixelColor(idlex[(i-1)%36],idley[(i-1)%36],GhostColor,150);
-        setPixelColor(idlex[(i-2)%36],idley[(i-2)%36],GhostColor,125);
+        setPixelColor(idlex[(i-1)%38],idley[(i-1)%36],GhostColor,150);
+        setPixelColor(idlex[(i-2)%39],idley[(i-2)%36],GhostColor,125);
         setPixelColor(idlex[(i-3)%36],idley[(i-3)%36],GhostColor,100);
         matrix.show();
         button();
@@ -182,6 +229,7 @@ void loop(){
       }
       refresh();
       //for(int i=0;i<10000;i++){button();client.loop(); }
-      */
+   
+
 
 }
