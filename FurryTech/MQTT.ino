@@ -43,35 +43,34 @@ void callback(char* topic, byte* payload, unsigned int length) {
     notificationflag=true;
   }
   if(number==1){fetchNsketch("epicface",animode,7,false);} 
-  if(number==2){matrix.drawPixel(0,0,matrix.Color(255,0,0));fetchNsketch("croc",animode,3,false);}
-  if(number==3){fetchNsketch("wg0face",1,0,false);}
+  if(number==2){fetchNsketch("croc",animode,3,false);}
+  if(number==3){fetchNsketch("kitty",animode,3,false);}
   if(number==4){hug("circle1");hug("circle2");hug("circle3");}
   if(number==5){fetchNsketch("kissy",animode,16,false);}
   if(number==6){fetchNsketch("cloud",animode,11,false);}
   if(number==7){fetchNsketch("chesth",animode,12,false);}
-  if(number==8){fetchNsketch("link" ,1,0,false);}
+  if(number==8){fetchNsketch("meteor" ,animode,15,false);}
   if(number==9){fetchNsketch("food" ,1,0,false);}
   if(number==10){fetchNsketch("fire" ,animode,2,false);}
-  if(number==11){fetchNsketch("meteor",animode,14,false);}
+  if(number==11){fetchNsketch("rocket",animode,10,false);}
   if(number==12){fetchNsketch("monkey",1,0,false);}
   if(number==13){fetchNsketch("dragon",animode,17,false);}
-  if(number==14){fetchNsketch("mario",1,0,false);}
-  if(number==15){fetchNsketch("let",animode,5,false);}
+  if(number==14){fetchNsketch("angel",animode,12,false);}
+  if(number==15){fetchNsketch("hb",animode,2,false);}
   if(number==16){fetchNsketch("snowcloud",1,0,false);}
-  if(number==17){fetchNsketch("stormcloud",1,0,false);}
+  if(number==17){fetchNsketch("lightning",animode,3,false);}
   if(number==18){fetchNsketch("parrot",1,0,false);}
   if(number==19){fetchNsketch("creeperd",animode,23,false);}
   if(number==20){fetchNsketch("calci",animode,3,false);}
-  if(number==21 || number==22 || number==23){
+        if(number==21){
+        fetchNsketch("xoxo",animode,19,false);
+      }
+  if(number==22 || number==23){
     int matrixwidth = matrix.width();
     while(true){
       matrix.fillScreen(0);
       matrix.setCursor(matrixwidth, 0);
       if(sendnrecv(animode)>0){break;}
-      if(number==21){
-        matrix.print(F("xoxo"));
-        if(--matrixwidth < -45) {matrixwidth = matrix.width();}
-      }
       else if(number==22){
         matrix.print(F("ftw"));
         if(--matrixwidth < -26) {matrixwidth = matrix.width();}
@@ -89,6 +88,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if(number==25){fetchNsketch("sun",5,7,false);}
   if(number==26){    
     fetchNsketch("at",1,0,false);
+    delay(2000);
     for(int i = 255;i>=0;i-=5){
       matrix.setBrightness(i);
       matrix.show();

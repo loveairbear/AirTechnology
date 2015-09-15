@@ -19,12 +19,13 @@ bool cancelpin() {
 }//end func
 
 uint8_t scrollingmusic(){
-           if (digitalRead(crosspin) == true){
+         if (digitalRead(crosspin) == true){
               //to the left!
             p.close();
             index = index-1;
             index = (index % soundsize);
-            playsongs(char(index));
+            char music = (char)index;
+            playmusic(&music);
             delay(500);
             return 1;
         
@@ -35,18 +36,17 @@ uint8_t scrollingmusic(){
           p.close();
           index = index+1;
           index = index % soundsize;
-          playsongs(char(index));
+          char music = (char)index;
+          playmusic(&music);
           delay(500);
           return 1;        
           }
         else{return 0;}
 }//end func
 uint8_t sendnrecv(uint8_t mode){
-      client.loop();
       connection();
-      
+      client.loop();
       if(cancelpin()==true){mqttsig=1 ;return 1;}//endif
-
       if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW ) { // Scroll through last 10 received messages LEFT
         vibrate();
         if(mode==3){
@@ -59,7 +59,6 @@ uint8_t sendnrecv(uint8_t mode){
           playmusic("bloop");
           return(4);
         }
-
       }//end if    
       if (digitalRead(circlepin) == HIGH and digitalRead(crosspin) == LOW) { // Scroll through last 10 received messages RIGHT
         vibrate();
@@ -90,36 +89,41 @@ uint8_t sendnrecv(uint8_t mode){
         refresh();
         client.publish(branch, "s-snd");
         return (5); // break out of function
-            
         }
 
       }//endif
       else{return 0;}
     }//end function
 
-void latcher(){if (mqttmsg!=NULL){client.publish(branch,mqttmsg);mqttmsg=NULL;client.loop();}} // simple function
+void latcher(){
+  if (mqttmsg!=NULL){
+    client.publish(branch,mqttmsg);
+    mqttmsg=NULL;client.loop();
+  }//endif
+} // endfunction
 
 
-int last = 0;
-int first = 0;
+
 
 bool button() {
+  int ButtonUp = 0;
+  int ButtonDown= 0;
   if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { // ENTER INBOX MODE 
     
     /* this part involving millis() is used to determine how long a button is held by entering an infinite loop once the button is pressed
     then once the button is let go the infinite loop exits while capturing the time upon letting the button go, the difference between the variables
     'first' and 'last' yield the time the button was held in milliseconds*/
     
-    first = millis();
+    ButtonUp = millis();
     while (true) {
       client.loop();
       if (digitalRead(heartpin) == LOW) {
-        last = millis();
+        ButtonDown = millis();
         break;
       }//endif
     }//endwhile
     
-    if (last - first > 800) {
+    if (ButtonUp - ButtonDown > 800) {
       p.begin("python");
       p.addParameter("/mnt/sda1/libpy/vce.py");
       p.runAsynchronously();
@@ -127,15 +131,16 @@ bool button() {
         fetchNsketch("muzak",0,2,false);
         if(cancelpin()==true){p.close();return true;}
       }
+      return true;
     
-    } //enter settings mode
+    }// end if for holding heart button
     
     else{
-    vibrate();
-    playmusic("rcvd"); //'
-    connection();
-    animode=3;//GLOBAL set animode to inbox mode - this flag is called 'animation mode',
-    //this flag lets the bitmap drawing function(infinite loop) know what mode the bear is in (ie. play the respective mode sounds)
+      vibrate();
+      playmusic("rcvd"); //'
+      connection();
+      animode=3;//GLOBAL set animode to inbox mode - this flag is called 'animation mode',
+      //this flag lets the bitmap drawing function(infinite loop) know what mode the bear is in (ie. play the respective mode sounds)
     
     mqttsig=0; // GLOBAL reset mqtt flag signal - this is default - this flag is a simple exit flag which in retrospect should be named 'exitsig'
     
@@ -146,14 +151,8 @@ bool button() {
     GhostColor[0] = 0;
     GhostColor[1] = 255;
     GhostColor[2] = 255;
-    
+    client.publish(branch, "hrtp"); // enter inbox mode
     while(true){
-      
-      if(called==true){ // execute once!
-        called=false;
-        client.publish(branch, "hrtp"); // enter inbox mode
-        latcher();
-      }//end if
       delay(500);
       sendnrecv(animode);// the sendnrecv function either prepares a string which would be used by latcher() which sends mqtt or
       //exit while modifying the animode variable thus changing to send mode (or can exit using mqttsig flag)
@@ -175,15 +174,15 @@ bool button() {
            
   /// ENTER PLAYMODE :D ////////
   if (digitalRead(crosspin) == HIGH) {                                         // This uses millis() to detect for how long a button has been held
-    first = millis();
+    ButtonDown = millis();
     index = 0;
     while (true) {
       if (digitalRead(crosspin) == LOW) {
-        last = millis();
+        ButtonUp = millis();
         break;
       }//endif
     }//endwhile
-    if (last - first >= 500) {
+    if (ButtonUp - ButtonDown >= 500) {
       vibrate();
       playmusic("pickup");
       while (true) {
@@ -206,16 +205,16 @@ bool button() {
 
 /// END PLAYMODE /////////////////
   if (digitalRead(squarepin) == HIGH) {                                         // This uses millis() to detect for how long a button has been held
-    first = millis();
+    ButtonDown = millis();
     index = 0;
     while (true) {
       if (digitalRead(squarepin) == LOW) {
-        last = millis();
+        ButtonUp = millis();
         break;
       }//endif
     }//endwhile
     
-    if (last - first > 800) { //enter settings mode
+    if (ButtonUp - ButtonDown > 800) { //enter settings mode
       refresh();
       while(true){
         heart(4);
@@ -238,7 +237,9 @@ bool button() {
     }//ennd else
   }// end square button ( cancel/ settings(hold)) if
   if (digitalRead(circlepin) == HIGH) {
-
+    delay(1500);
+    while(true){
+    if(digitalRead(crosspin)==HIGH){
     vibrate();
     playmusic("bloop");
     fetchNsketch("eau1",1,0,false);
@@ -250,8 +251,24 @@ bool button() {
         fetchNsketch("tama",0,6,true);
         refresh();
         return true;
-        
-      }
+      }   
+    }
+    }
+    if(digitalRead(circlepin)==HIGH){
+    vibrate();
+    playmusic("bloop");
+    fetchNsketch("appl1",1,0,false);
+    while(true){
+      if(cancelpin()){return true;}
+      if(digitalRead(heartpin)==HIGH){
+        fetchNsketch("appl",0,5,true);
+        fetchNsketch("tama",0,6,true);
+        fetchNsketch("tama",0,6,true);
+        refresh();
+        return true;
+      }   
+    }
+    }
     }
     return (true);
   }

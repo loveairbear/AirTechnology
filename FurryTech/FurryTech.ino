@@ -32,8 +32,6 @@ NEO_MATRIX_TOP   + NEO_MATRIX_LEFT +
 NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
 NEO_GRB            + NEO_KHZ800);
 
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(64, PIN, NEO_GRB + NEO_KHZ800);
-
 // For adafruit 8x8 RIGID matrix
 /*
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
@@ -60,7 +58,7 @@ PubSubClient client("m10.cloudmqtt.com",16233,callback,yun);
 
 int sd[64]; //buffer array for bitmap rendering
 #define vibratepin 11
-char* branch = "protobear/sig";
+char* branch="protobear/sig";
 uint8_t index = 0;// global index to scroll through emoticons in sendmode
 
 char* mqttmsg;//global buffer for mqtt, this way i can control how i latch my mqtt messages for latch function
@@ -73,7 +71,7 @@ uint8_t exitsig=0;
 bool notificationflag=false;
 
 //Interfaced vars
-uint8_t GhostColor[]={255,255,0}; // This is the idle animation which also provides push notification
+uint8_t GhostColor[]={0,255,255}; // This is the idle animation which also provides push notification
 uint8_t brightness = 255;  // Should be a multiple of 5
 const uint8_t soundsize = 14;
 int firstghostcolortimer=millis();
@@ -94,7 +92,7 @@ void vibrate(){
 
 void setup() {
   delay(200);
-  strip.begin();
+  
   Bridge.begin();
   FileSystem.begin();
   matrix.begin();

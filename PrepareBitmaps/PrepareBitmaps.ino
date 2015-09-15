@@ -179,7 +179,10 @@ void setup() {
 
 void loop() {
   //render("evey.bmp");
-  fullpkg("muzak",2);
+  fullpkg("appl",5);
+  render("suncloud.bmp");
+  //fullpkg("kitty",3);
+  //fullpkg("lightning",3);
   //fullpkg("creeperd",23);
  // fullpkg("kissy",16);
   //fullpkg("meteor",14);
