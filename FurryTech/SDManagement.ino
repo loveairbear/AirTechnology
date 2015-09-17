@@ -45,13 +45,14 @@ else{
 }
 
 
-bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames,bool still){
+bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames,bool runOnce){
   char* w = ("/mnt/sda1/Dsprites/");
   mqttsig=0;
-  
   if(frames!=0){
-    while (true){
-      for(int i=1 ; i <= frames ; i++){
+    while (true){// infinite looping animations
+      
+      for(int i=1 ; i <= frames ; i++){//frame loop
+      
         char* path =(char*)malloc(strlen(w)+strlen(werd)+3+1); /* make space for the new string (should check the return value ...) */
         char list[2];
         strcpy(path, w); /* copy name into the new var*/
@@ -62,12 +63,17 @@ bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames,bool still){
         drawbitmap(sd,mode);
         int firstTime = millis(); // lastTime and firstTime to time infinite loop
         int lastTime = firstTime; 
+        
         while ((lastTime-firstTime)<=350){
           latcher();
-          client.loop();
+          
           if(mqttsig == 1){mqttsig=0;return false;} // common exit flag
           
-          if(mode>2){if(sendnrecv(mode)>0){latcher();return true;}} // send and receive mode
+          if(mode>2){
+            if(sendnrecv(mode)>0){
+              return true;
+            }
+          } // send and receive mode
           
           if(mode==2){
             if(scrollingmusic()> 0){return true;}
@@ -75,7 +81,11 @@ bool fetchNsketch(char* werd,uint8_t mode,uint8_t frames,bool still){
           lastTime = millis();
           }//end delay while loop
         } //end forloop
-        if(still==true){return true;} // this is if you choose to run the animation once
+        
+        if(runOnce==true){
+          delay(1500);
+          return true;
+        } // this is if you choose to run the animation once
       }//endwhile
   }//endif
 

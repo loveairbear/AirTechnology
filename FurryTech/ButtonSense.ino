@@ -19,14 +19,15 @@ bool cancelpin() {
 }//end func
 
 uint8_t scrollingmusic(){
-         if (digitalRead(crosspin) == true){
+         if (digitalRead(crosspin) == true && digitalRead(circlepin) == false){
               //to the left!
             p.close();
             index = index-1;
             index = (index % soundsize);
-            char music = (char)index;
-            playmusic(&music);
-            delay(500);
+            char music[3];
+            itoa(index,music,10);
+            playmusic(music);
+            delay(1000);
             return 1;
         
          }
@@ -36,16 +37,15 @@ uint8_t scrollingmusic(){
           p.close();
           index = index+1;
           index = index % soundsize;
-          char music = (char)index;
-          playmusic(&music);
-          delay(500);
+            char music[3];
+            itoa(index,music,10);
+          playmusic(music);
+          delay(1000);
           return 1;        
           }
         else{return 0;}
 }//end func
 uint8_t sendnrecv(uint8_t mode){
-      connection();
-      client.loop();
       if(cancelpin()==true){mqttsig=1 ;return 1;}//endif
       if (digitalRead(crosspin) == HIGH and digitalRead(circlepin) == LOW ) { // Scroll through last 10 received messages LEFT
         vibrate();
@@ -96,10 +96,19 @@ uint8_t sendnrecv(uint8_t mode){
     }//end function
 
 void latcher(){
+ 
   if (mqttmsg!=NULL){
     client.publish(branch,mqttmsg);
-    mqttmsg=NULL;client.loop();
+    mqttmsg=NULL;
+    int TimerStart=millis();
+    int TimerEnd = 0;
+    while(TimerEnd-TimerStart<1000){
+      TimerEnd=millis();
+      client.loop();
+    }// end while
+    
   }//endif
+  client.loop();
 } // endfunction
 
 
@@ -108,6 +117,7 @@ void latcher(){
 bool button() {
   int ButtonUp = 0;
   int ButtonDown= 0;
+  
   if (digitalRead(heartpin) == HIGH && digitalRead(squarepin) == LOW) { // ENTER INBOX MODE 
     
     /* this part involving millis() is used to determine how long a button is held by entering an infinite loop once the button is pressed
@@ -152,19 +162,23 @@ bool button() {
     GhostColor[1] = 255;
     GhostColor[2] = 255;
     client.publish(branch, "hrtp"); // enter inbox mode
-    while(true){
-      delay(500);
+    ButtonDown=millis();
+    while(ButtonUp-ButtonDown<200){
+      ButtonUp=millis();
+      client.loop();
+    }// end while
+    
+    while(true){//inbox infinite loop
       sendnrecv(animode);// the sendnrecv function either prepares a string which would be used by latcher() which sends mqtt or
       //exit while modifying the animode variable thus changing to send mode (or can exit using mqttsig flag)
       latcher();
+      delay(250);
       if(mqttsig==1){return 1;}
       
-      if(animode==4){
-        client.loop();
+      if(animode==4){//entersendmode
         while(true){
           sendnrecv(animode);
           latcher();
-          client.loop();
           if(mqttsig==1){return 1;}
           }//end infinite while loop
         }//endif
@@ -197,6 +211,7 @@ bool button() {
           if(index==4){fetchNsketch("chesth",2,12,true);}   
           else{fetchNsketch("muzak",0,2,true);}
         }
+        return true;
         
     }//end while
     }//end if

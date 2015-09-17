@@ -5,7 +5,7 @@ boolean connection() {
     if(notificationflag==false){
       GhostColor[0]=0;
       GhostColor[1]=255;
-      GhostColor[2]=0;
+      GhostColor[2]=255;
     }
     client.loop();
       

@@ -74,8 +74,6 @@ bool notificationflag=false;
 uint8_t GhostColor[]={0,255,255}; // This is the idle animation which also provides push notification
 uint8_t brightness = 255;  // Should be a multiple of 5
 const uint8_t soundsize = 14;
-int firstghostcolortimer=millis();
-int lastghostcolortimer=millis();
 
 boolean refresh(){
   matrix.fillScreen(0);
@@ -92,7 +90,7 @@ void vibrate(){
 
 void setup() {
   delay(200);
-  
+  Serial.begin(9600);
   Bridge.begin();
   FileSystem.begin();
   matrix.begin();
@@ -207,7 +205,6 @@ void loop(){
   fetchNsketch("kissy",animode,16,true);
   */
   
-  client.loop();
       connection();
       for(int i = 0;i < 36;i++){
         if(notificationflag==true && i%2==0){ // if the notification flag is active then create arrowhead around ghost
