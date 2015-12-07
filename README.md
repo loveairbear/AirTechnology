@@ -6,11 +6,10 @@ It's a nice sunny day.
 Airbear Prototype 1 powered by Arduino Yun
 
 ##Connect with Airbear
-1. Launching in August! meanwhile join the party below
-2. Main site - http://loveairbear.com
-3. Blog - http://loveairbear.tumblr.com/
-4. Twitter - https://twitter.com/loveairbear
-5. Instagram - https://instagram.com/airbearplush/
+1. Main site - http://loveairbear.com
+2. Blog - http://loveairbear.tumblr.com/
+3. Twitter - https://twitter.com/loveairbear
+4. Instagram - https://instagram.com/airbearplush/
 
 ##Dependencies
 
