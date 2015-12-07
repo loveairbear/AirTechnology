@@ -179,8 +179,26 @@ void setup() {
 
 void loop() {
   //render("evey.bmp");
-  fullpkg("appl",5);
-  render("suncloud.bmp");
+  render("bleuf.bmp");
+  render("clock.bmp");
+  render("feubleu.bmp");
+  render("berobor.bmp");
+  render("borbor.bmp");
+  render("stopwatch.bmp");
+  render("meditate.bmp");
+  render("wrench.bmp");
+  render("gft.bmp");
+  fullpkg("trees",5);
+  /*
+  
+  fullpkg("app",5);
+  fullpkg("cal",5);
+  fullpkg("pri",5);
+  fullpkg("mon",5);
+  fullpkg("if",5);
+  */
+  //fullpkg("wtama",8);
+  //render("time.bmp");
   //fullpkg("kitty",3);
   //fullpkg("lightning",3);
   //fullpkg("creeperd",23);
