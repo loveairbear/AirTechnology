@@ -1,13 +1,3 @@
-int newMod(int num,int div){
-  if(num<0){
-    return (-1*num)%div;
-  }
-  else{
-    return num%div;
-  }
-}//end function
-  
-
 bool cancelpin() {
   if (digitalRead(squarepin) == HIGH && digitalRead(heartpin) == LOW) {
     vibrate();
@@ -33,7 +23,7 @@ uint8_t scrollingmusic(){
               //to the left!
             p.close();
             index = index-1;
-            index = newMod(index,soundsize);
+            index = (index % soundsize);
             char music[3];
             itoa(index,music,10);
             playmusic(music);
@@ -221,7 +211,6 @@ bool button() {
         scrollingmusic();
         if(cancelpin()==true){mqttsig=0;return false;}
         while(true){
-          scrollingmusic();
           if(cancelpin()==true){p.close();mqttsig=0;return false;}
           if(index==1){fetchNsketch("croc",0,3,true);}
           if(index==2){fetchNsketch("kissy",0,16,true);}
@@ -234,7 +223,7 @@ bool button() {
           if(index==8){fetchNsketch("dragon",0,17,true);}
           //if(index==3){fetchNsketch("time",1,0,true);}
           //if(index==4){fetchNsketch("chesth",0,12,true);}   
-          else{fetchNsketch("muzak",0,2,false);}
+          //else{fetchNsketch("muzak",0,2,false);}
         }
       }//end while
       return false;
@@ -318,12 +307,11 @@ bool button() {
   //return (0);
 }//end function 
 
-/*
+
 void offline(){
 
   if(digitalRead(heartpin)){
     int matrixwidth = matrix.width();
-    int index = 1;
     while(true){
         if(cancelpin()==true){return;}
         if(index==1){fetchNsketch("croc",0,3,true);}
@@ -352,7 +340,6 @@ void offline(){
           //if(index==4){fetchNsketch("chesth",0,12,true);}
             if(digitalRead(crosspin)==HIGH){
     index=(index-1)%12;
-    
   }
     if(digitalRead(circlepin)==HIGH){
     index=(index+1)%12;
@@ -360,5 +347,3 @@ void offline(){
     }
   }
 }
-*/
-

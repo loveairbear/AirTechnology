@@ -3,9 +3,9 @@ boolean connection() {
   if (client.connected()) {
     client.subscribe("protobear/com");
     if(notificationflag==false){
-      GhostColor[0]=255;
+      GhostColor[0]=0;
       GhostColor[1]=255;
-      GhostColor[2]=10;
+      GhostColor[2]=255;
     }
     client.loop();
       
@@ -20,9 +20,9 @@ boolean connection() {
       }
       
       }
-      GhostColor[0]=150;
-      GhostColor[1]=150;
-      GhostColor[2]=150;
+      GhostColor[0]=255;
+      GhostColor[1]=0;
+      GhostColor[2]=0;
       return false;
     }//endwhile 
   }//endif
@@ -41,7 +41,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   
   if(number==30){
     GhostColor[0] = 0;
-    GhostColor[1] = 10;
+    GhostColor[1] = 0;
     GhostColor[2] = 255;
     notificationflag=true;
   }
@@ -117,7 +117,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if(number==35){fetchNsketch("meditate",1,0,false);}
   if(number==36){fetchNsketch("wrench",1,0,false);}
   if(number==37){fetchNsketch("gft",1,0,false);}
-  if(number==38){fetchNsketch("creeperd",animode,23,false);}
   
   else{
     connection();

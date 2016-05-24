@@ -1,6 +1,5 @@
 
 void playmusic(char file[]){
-  p.close();
   p.begin("madplay");
   
   if(strlen(file)>2){

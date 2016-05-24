@@ -105,35 +105,13 @@ void setup() {
   pinMode(crosspin, INPUT);
   pinMode(circlepin,INPUT);
   pinMode(hugpin,INPUT);
-  //client.connect("arduinoClient","apjtgmvm","Y2c5YXfdCULY");
-  //connection(); // function to connect to mqtt server 
+  client.connect("arduinoClient","apjtgmvm","Y2c5YXfdCULY");
+  connection(); // function to connect to mqtt server 
   playmusic("light");
   //fetchNsketch("monkey",1,0,false);
   vibrate();
 }
 
-void program(){
-  refresh();
-for(int i = 0;i < 36;i++){
-        if(notificationflag==true && i%2==0){ // if the notification flag is active then create arrowhead around ghost
-          matrix.drawPixel(idlex[(i)%36],idley[(i)%36]-1,matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
-          matrix.drawPixel(idlex[(i)%36]+1,idley[(i)%36]-1,matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
-          matrix.drawPixel(idlex[(i)%36]+1,idley[(i)%36],matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
-        }
-        setPixelColor(idlex[(i)%37],idley[(i)%36],GhostColor,255);
-        setPixelColor(idlex[(i-1)%38],idley[(i-1)%36],GhostColor,150);
-        setPixelColor(idlex[(i-2)%39],idley[(i-2)%36],GhostColor,125);
-        setPixelColor(idlex[(i-3)%36],idley[(i-3)%36],GhostColor,100);
-        matrix.show();
-        button();
-        //offline();
-        client.loop(); 
-        delay(180);
-        refresh();
-      }
-      refresh();
-
-}
 void loop(){
   //fetchNsketch("hb",0,2,true);
   /*
@@ -215,72 +193,40 @@ void loop(){
     matrix.setBrightness(i);
     matrix.show();
     delay(5);
-  }*/
-  
+  }
+  /*
   matrix.setBrightness(250);
   fetchNsketch("sun",5,7,true);
-  delay(2000);
   fetchNsketch("sun",5,7,true);
-  delay(2000);
   fetchNsketch("sun",5,7,true);
-  delay(2000);
-  //fetchNsketch("sun",5,7,true);
+  fetchNsketch("sun",5,7,true);
   
-  //fetchNsketch("cloud",animode,11,true);
-  //fetchNsketch("chesth",animode,12,true);
+  fetchNsketch("cloud",animode,11,true);
+  fetchNsketch("chesth",animode,12,true);
   fetchNsketch("dragon",animode,17,true);
   fetchNsketch("kissy",animode,16,true);
   
   fetchNsketch("calci",animode,3,true);
-  
-      //connection();
-  fetchNsketch("kitty",animode,3,true);
-  fetchNsketch("kitty",animode,3,true);
-  fetchNsketch("kitty",animode,3,true);
-  program();
-  fetchNsketch("kissy",animode,16,true);
-  program();
-  fetchNsketch("angel",animode,12,true);
-  program();
-  
-  fetchNsketch("croc",animode,3,true);
-  fetchNsketch("croc",animode,3,true);
-  fetchNsketch("croc",animode,3,true);
-
-  program();
-  fetchNsketch("lightning",animode,3,true);
-  fetchNsketch("lightning",animode,3,true);
-  fetchNsketch("lightning",animode,3,true);
-  program();
-  fetchNsketch("if",1,0,true);
-  delay(3000);
-  program();
-  fetchNsketch("dragon",animode,17,true);
-  program();
-  program();
-  fetchNsketch("calci",animode,3,true);
-  fetchNsketch("calci",animode,3,true);
-  fetchNsketch("calci",animode,3,true);
-  program();
-  
-      fetchNsketch("at",1,0,false);
-    delay(3000);
-    for(int i = 255;i>=0;i-=5){
-      matrix.setBrightness(i);
-      matrix.show();
-      delay(5);
-  }
-  matrix.setBrightness(brightness);
-  matrix.show();
-  
-  program();
-  fetchNsketch("sun",5,7,true);
-  delay(3000);
-  
-  //connection();
-  program();
-
-  
+  */
+      connection();
+      for(int i = 0;i < 36;i++){
+        if(notificationflag==true && i%2==0){ // if the notification flag is active then create arrowhead around ghost
+          matrix.drawPixel(idlex[(i)%36],idley[(i)%36]-1,matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
+          matrix.drawPixel(idlex[(i)%36]+1,idley[(i)%36]-1,matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
+          matrix.drawPixel(idlex[(i)%36]+1,idley[(i)%36],matrix.Color(GhostColor[0],GhostColor[1],GhostColor[2]));
+        }
+        setPixelColor(idlex[(i)%37],idley[(i)%36],GhostColor,255);
+        setPixelColor(idlex[(i-1)%38],idley[(i-1)%36],GhostColor,150);
+        setPixelColor(idlex[(i-2)%39],idley[(i-2)%36],GhostColor,125);
+        setPixelColor(idlex[(i-3)%36],idley[(i-3)%36],GhostColor,100);
+        matrix.show();
+        button();
+        //offline();
+        client.loop(); 
+        delay(180);
+        refresh();
+      }
+      refresh();
       //for(int i=0;i<10000;i++){button();client.loop(); }
    
   
