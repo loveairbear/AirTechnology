@@ -11,7 +11,7 @@ int newMod(int num,int div){
 bool cancelpin() {
   if (digitalRead(squarepin) == HIGH && digitalRead(heartpin) == LOW) {
     vibrate();
-    playmusic("back");
+    //playmusic("back");
     for (int q = brightness ; q >= 0  ; q -= 5) {
       matrix.setBrightness(q);
       matrix.show();
@@ -36,7 +36,7 @@ uint8_t scrollingmusic(){
             index = newMod(index,soundsize);
             char music[3];
             itoa(index,music,10);
-            playmusic(music);
+            //playmusic(music);
             delay(1000);
             return 1;
         
@@ -49,7 +49,7 @@ uint8_t scrollingmusic(){
           index = index % soundsize;
             char music[3];
             itoa(index,music,10);
-          playmusic(music);
+          //playmusic(music);
           delay(1000);
           return 1;        
           }
@@ -61,12 +61,12 @@ uint8_t sendnrecv(uint8_t mode){
         vibrate();
         if(mode==3){
           mqttmsg = "h-l";
-          playmusic("light");
+          //playmusic("light");
           return 3;            
         }
         if(mode==4){
           mqttmsg = "s-l";
-          playmusic("bloop");
+          //playmusic("bloop");
           return(4);
         }
       }//end if    
@@ -74,12 +74,12 @@ uint8_t sendnrecv(uint8_t mode){
         vibrate();
         if(mode==3){
         mqttmsg = "h-r";
-        playmusic("light");
+        //playmusic("light");
         return 3;            
         }
         if(mode==4){
         mqttmsg = "s-r";
-        playmusic("bloop");
+        //playmusic("bloop");
         return(4);            
         }
 
@@ -89,12 +89,12 @@ uint8_t sendnrecv(uint8_t mode){
         vibrate();
         if(mode==3){
         animode=4; // set flag to 4 which is sendmode
-        playmusic("mode");      
+        //playmusic("mode");      
         return 4; // 4 is sendmode            
         }
         if(mode==4){
         vibrate();
-        playmusic("send");
+        //playmusic("send");
         mqttsig=1;
         refresh();
         client.publish(branch, "s-snd");
@@ -158,7 +158,7 @@ bool button() {
     
     else{
       vibrate();
-      playmusic("rcvd"); //
+      ("rcvd"); //
       connection();
       animode=3;//GLOBAL set animode to inbox mode - this flag is called 'animation mode',
       //this flag lets the bitmap drawing function(infinite loop) know what mode the bear is in (ie. play the respective mode sounds)
@@ -216,7 +216,7 @@ bool button() {
     }//endwhile
     if (ButtonUp - ButtonDown >= 500) {
       vibrate();
-      playmusic("pickup");
+      ("pickup");
       while (true) {
         scrollingmusic();
         if(cancelpin()==true){mqttsig=0;return false;}
@@ -272,7 +272,7 @@ bool button() {
     }
     else{
     vibrate();
-    playmusic("back");
+    //playmusic("back");
     }//ennd else
   }// end square button ( cancel/ settings(hold)) if
   if (digitalRead(circlepin) == HIGH) {
@@ -280,13 +280,13 @@ bool button() {
     while(true){
     if(digitalRead(crosspin)==HIGH){
     vibrate();
-    playmusic("bloop");
+    //playmusic("bloop");
     fetchNsketch("eau1",1,0,false);
     while(true){
       if(cancelpin()){return true;}
       if(digitalRead(heartpin)==HIGH){
         fetchNsketch("eau",0,6,true);
-        playmusic("18");
+        ("18");
         fetchNsketch("tama",0,6,true);
         fetchNsketch("tama",0,6,true);
         refresh();
@@ -296,13 +296,13 @@ bool button() {
     }
     if(digitalRead(circlepin)==HIGH){
     vibrate();
-    playmusic("bloop");
+    //playmusic("bloop");
     fetchNsketch("appl1",1,0,false);
     while(true){
       if(cancelpin()){return true;}
       if(digitalRead(heartpin)==HIGH){
         fetchNsketch("appl",0,5,true);
-        playmusic("18");
+        //playmusic("18");
         fetchNsketch("tama",0,6,true);
         fetchNsketch("tama",0,6,true);
         refresh();

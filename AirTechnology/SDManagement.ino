@@ -1,5 +1,8 @@
 void SDbytes(char path[],int sdarray[]){
   File w=FileSystem.open(path,FILE_READ);
+  if (w){
+    Serial.println("success");
+  }
   int x;
   for(int i = 0 ; i < 64; i++){
     x = w.read() << 8; // Extract the MSB of the 16-bit integer

@@ -1,12 +1,12 @@
-
+/*
 void playmusic(char file[]){
   p.close();
   p.begin("madplay");
   
   if(strlen(file)>2){
-  char* path =(char*)malloc(17 + strlen(file)+1+4); /* make space for the new string (should check the return value ...) */
-  strcpy(path, "/mnt/sda1/Sounds/"); /* copy name into the new var, used strncpy to combat buffer overflow*/
-  strcat(path, file); /* add the extension */
+  char* path =(char*)malloc(17 + strlen(file)+1+4); 
+  strcpy(path, "/mnt/sda1/Sounds/"); 
+  strcat(path, file); 
   strcat(path, ".mp3");
     p.addParameter(path);
     Serial.println(path);
@@ -16,9 +16,9 @@ void playmusic(char file[]){
   }
   else{
     char song[3];
-   char* path =(char*)malloc(16+3+1+4); /* make space for the new string (should check the return value ...) */ 
-  strcpy(path, "/mnt/sda1/Songs/"); /* copy name into the new var, used strncpy to combat buffer overflow*/ 
-   strcat(path, file); /* add the extension */ 
+   char* path =(char*)malloc(16+3+1+4); 
+  strcpy(path, "/mnt/sda1/Songs/"); 
+   strcat(path, file); 
    strcat(path, ".mp3"); 
    p.addParameter(path);
   Serial.println(path); 
@@ -30,5 +30,6 @@ void playmusic(char file[]){
 
   }
 }//end function
+*/
 
 

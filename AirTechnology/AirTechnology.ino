@@ -90,9 +90,10 @@ void vibrate(){
 
 void setup() {
   delay(200);
-  //Serial.begin(9600);
+  Serial.begin(9600);
   Bridge.begin();
   FileSystem.begin();
+  delay(200);
   matrix.begin();
   matrix.setBrightness(brightness);//Brightness for NEOPIXEL matrix
   matrix.fillScreen(0);
@@ -107,7 +108,7 @@ void setup() {
   pinMode(hugpin,INPUT);
   //client.connect("arduinoClient","apjtgmvm","Y2c5YXfdCULY");
   //connection(); // function to connect to mqtt server 
-  playmusic("light");
+  //playmusic("light");
   //fetchNsketch("monkey",1,0,false);
   vibrate();
 }
@@ -127,7 +128,7 @@ for(int i = 0;i < 36;i++){
         matrix.show();
         button();
         //offline();
-        client.loop(); 
+        //client.loop(); 
         delay(180);
         refresh();
       }
@@ -216,7 +217,7 @@ void loop(){
     matrix.show();
     delay(5);
   }*/
-  
+  /*
   matrix.setBrightness(250);
   fetchNsketch("sun",5,7,true);
   delay(2000);
@@ -228,6 +229,7 @@ void loop(){
   
   //fetchNsketch("cloud",animode,11,true);
   //fetchNsketch("chesth",animode,12,true);
+  */
   fetchNsketch("dragon",animode,17,true);
   fetchNsketch("kissy",animode,16,true);
   
